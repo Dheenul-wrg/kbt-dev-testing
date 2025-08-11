@@ -1,0 +1,10 @@
+---
+description: API validation and authentication guidance
+globs: "src/app/api/**/*,src/utils/**/*"
+alwaysApply: false
+---
+
+- Validate request body and params at the route edge; prefer Zod if approved, else shared lightweight validators.
+- Standardize error responses: `{ error: { code, message } }`; avoid leaking stack traces or raw exceptions.
+- Prefer httpOnly, Secure cookies for tokens; set `SameSite=Lax`. Implement reasonable token expiry and rotation.
+- Never log secrets or PII; redact user identifiers in logs.

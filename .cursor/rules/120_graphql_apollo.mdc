@@ -1,0 +1,16 @@
+---
+description: Apollo Client usage and GraphQL data-fetching patterns
+globs: "src/utils/apollo/**/*,src/services/**/*,src/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+- Default client: import `apolloClient` from `@/utils/apollo/apollo-client`.
+- For custom endpoints/headers, use `createApolloClient(uri, headers)` (prefer server-side).
+- Configure endpoint via `NEXT_PUBLIC_GRAPHQL_URL`; never embed secrets in client code.
+- Errors are logged by `errorLink`; surface user-friendly messages to UI.
+- Default query policies are set; override per query only when necessary.
+- Prefer server-side GraphQL calls in RSCs or route handlers; avoid heavy client queries.
+- For server-side usage, initialize a per-request client with headers derived from cookies/session; do not reuse a global client across users.
+- On the server, prefer `process.env.GRAPHQL_URL` (non-public) for requests; reserve `NEXT_PUBLIC_GRAPHQL_URL` for client components only.
+- In production, suppress verbose error logging from the error link; never log PII or tokens; map to user-friendly messages at the boundary.
+- Use `server-only` for modules intended exclusively for server execution.

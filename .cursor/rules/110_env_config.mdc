@@ -1,0 +1,11 @@
+---
+description: Environment configuration and access patterns
+globs: "src/**/*,next.config.ts"
+alwaysApply: false
+---
+
+- Centralize env access in `@/config/env` with typed getters (server vs client). Keep the module lightweight.
+- Required server env: `DATABASE_URL`, `GRAPHQL_URL`. Client-safe: `NEXT_PUBLIC_GRAPHQL_URL`.
+- Fail fast on missing required server envs (throw during module init in development and at runtime on server).
+- Never access `process.env` in Client Components except `NEXT_PUBLIC_*` vars.
+- Avoid leaking secrets into client bundles; only expose variables with `NEXT_PUBLIC_` prefix when strictly necessary.

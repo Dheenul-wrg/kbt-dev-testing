@@ -1,0 +1,10 @@
+---
+description: Testing strategy guidance (optional)
+globs: "src/**/*,package.json"
+alwaysApply: false
+---
+
+- Unit tests: Vitest (requires approval to add). Co-locate tests or use `src/__tests__`.
+- E2E tests: Playwright (requires approval to add). Keep flows minimal and stable.
+- Mock external services (GraphQL/HTTP) in unit tests; use MSW for client tests if needed.
+- Keep tests fast and deterministic; avoid real DB in unit tests—mock Prisma.

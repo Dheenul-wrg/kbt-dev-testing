@@ -1,0 +1,15 @@
+---
+description: Prisma usage, migrations, and safety
+globs: "prisma/**/*,src/repository/**/*,src/app/api/**/*"
+alwaysApply: false
+---
+
+- Use the singleton `prisma` from `@/repository/prisma`; do not create new clients elsewhere.
+- Database is PostgreSQL (`DATABASE_URL`). Keep credentials out of client code.
+- For schema changes, include required commands: `npm run db:generate` and migration steps.
+- Seeding via `npm run db:seed` (current seed is a no-op placeholder).
+- Ensure proper error handling and disconnection in scripts.
+- Avoid long transactions in API routes; keep queries small and typed.
+- Logging: enable `log: ['query']` only in development; in production prefer `log: ['error', 'warn']`.
+- Next.js runtime selection: any route or module that uses Prisma must export `const runtime = 'nodejs'`; never `edge`.
+- In long-running scripts, ensure `prisma.$disconnect()` on process exit.

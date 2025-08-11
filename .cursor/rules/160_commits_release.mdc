@@ -1,0 +1,10 @@
+---
+description: Conventional Commits and automated releases
+globs: "commitlint.config.js,package.json"
+alwaysApply: false
+---
+
+- Use Conventional Commits (type(scope): subject). Examples: `feat(auth): add login route`, `fix(prisma): correct relation`.
+- `chore(release):` is reserved for automated releases.
+- Versioning and changelogs are handled by semantic-release. Do not manually bump versions.
+- Keep PR titles aligned with commit conventions.

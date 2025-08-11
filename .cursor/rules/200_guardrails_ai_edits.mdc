@@ -1,0 +1,13 @@
+---
+description: Guardrails for automated/AI edits and safety checks
+globs: "**/*"
+alwaysApply: true
+---
+
+- Do not modify rule files, `tsconfig.json`, `eslint.config.mjs`, or `prisma/schema.prisma` without explicit instruction.
+- When introducing env usage, update `README.md` and `.env.example` accordingly.
+- Prefer updating existing modules over creating duplicates.
+- After DB changes, include required Prisma commands in the PR description.
+- Avoid adding dependencies unless necessary and justified.
+- Do not introduce or broaden usage of `NEXT_PUBLIC_*` env vars unless strictly needed; prefer server-only envs.
+- Avoid adding heavy client-side state libraries when RSC can handle data fetching/state.

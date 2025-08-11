@@ -1,0 +1,11 @@
+---
+description: RSC runtime and caching strategy
+globs: "src/app/**/*"
+alwaysApply: false
+---
+
+- Prefer static rendering with revalidation where possible; otherwise set `export const dynamic = 'force-dynamic'` intentionally.
+- Use route-level caching controls: `export const revalidate = <seconds>` and `export const fetchCache = 'force-no-store'` when necessary.
+- Tag cacheable fetches with route-level tags and invalidate via `revalidateTag`. Plan predictable tag names per resource type.
+- For API routes, set caching headers explicitly; avoid implicit defaults.
+- Choose runtime per route: `export const runtime = 'nodejs'` for Prisma/Node-only usage; `edge` only for pure web-standard code.

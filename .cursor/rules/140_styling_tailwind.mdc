@@ -1,0 +1,11 @@
+---
+description: Styling with Tailwind CSS and PostCSS
+globs: "src/**/*.{ts,tsx},src/styles/**/*,postcss.config.mjs"
+alwaysApply: false
+---
+
+- Use Tailwind utility-first classes for layout/spacing/typography.
+- PostCSS uses `@tailwindcss/postcss`; avoid custom plugins unless required.
+- Keep className strings readable; factor repeated patterns into components.
+- Prefer semantic HTML and accessible variants over arbitrary CSS.
+- Avoid large custom CSS files; co-locate minimal CSS only when necessary.
