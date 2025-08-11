@@ -34,6 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ## 🛠️ Available Scripts
 
 ### Development
+
 ```bash
 npm run dev          # Start development server
 npm run build        # Build for production
@@ -41,6 +42,7 @@ npm run start        # Start production server
 ```
 
 ### Code Quality
+
 ```bash
 npm run lint         # Run ESLint
 npm run lint:fix     # Fix ESLint issues
@@ -49,6 +51,7 @@ npm run type-check   # TypeScript type checking
 ```
 
 ### Database
+
 ```bash
 npm run db:generate  # Generate Prisma client
 npm run db:push      # Push schema to database
