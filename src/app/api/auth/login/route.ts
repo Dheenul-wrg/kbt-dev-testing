@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { locale } from '@/utils/locale';
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     if (!email || !password) {
       return NextResponse.json(
-        { error: 'Email and password are required' },
+        { error: locale.form('allFieldsRequired') },
         { status: 400 }
       );
     }
@@ -20,13 +21,13 @@ export async function POST(request: NextRequest) {
     // - Return user data and token
 
     return NextResponse.json(
-      { error: 'Authentication not implemented yet' },
+      { error: locale.errors('authenticationNotImplemented') },
       { status: 501 }
     );
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: locale.errors('serverError') },
       { status: 500 }
     );
   }
