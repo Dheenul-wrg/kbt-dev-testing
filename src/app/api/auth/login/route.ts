@@ -1,33 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { locale } from '@/utils/locale';
+import { FORM_MESSAGES, ERROR_MESSAGES } from '@/constants';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, password } = body;
 
-    // Validate input
     if (!email || !password) {
       return NextResponse.json(
-        { error: locale.form('allFieldsRequired') },
+        { error: FORM_MESSAGES.ALL_FIELDS_REQUIRED },
         { status: 400 }
       );
     }
 
-    // TODO: Implement actual authentication logic
-    // - Hash and verify password
-    // - Check user credentials against database
-    // - Generate JWT token
-    // - Return user data and token
-
     return NextResponse.json(
-      { error: locale.errors('authenticationNotImplemented') },
+      { error: ERROR_MESSAGES.AUTHENTICATION_NOT_IMPLEMENTED },
       { status: 501 }
     );
   } catch (error) {
-    console.error('Login error:', error);
     return NextResponse.json(
-      { error: locale.errors('serverError') },
+      { error: ERROR_MESSAGES.SERVER_ERROR },
       { status: 500 }
     );
   }

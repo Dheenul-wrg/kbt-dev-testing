@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { locale } from '@/utils/locale';
+import { FORM_MESSAGES, ERROR_MESSAGES } from '@/constants';
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     if (!firstName || !lastName || !email || !password) {
       return NextResponse.json(
-        { error: locale.form('allFieldsRequired') },
+        { error: FORM_MESSAGES.ALL_FIELDS_REQUIRED },
         { status: 400 }
       );
     }
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: locale.form('invalidEmail') },
+        { error: FORM_MESSAGES.INVALID_EMAIL },
         { status: 400 }
       );
     }
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     // Validate password strength
     if (password.length < 6) {
       return NextResponse.json(
-        { error: locale.form('minPasswordLength') },
+        { error: FORM_MESSAGES.MIN_PASSWORD_LENGTH },
         { status: 400 }
       );
     }
@@ -39,13 +39,13 @@ export async function POST(request: NextRequest) {
     // - Return user data and token
 
     return NextResponse.json(
-      { error: locale.errors('registrationNotImplemented') },
+      { error: ERROR_MESSAGES.REGISTRATION_NOT_IMPLEMENTED },
       { status: 501 }
     );
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
-      { error: locale.errors('serverError') },
+      { error: ERROR_MESSAGES.SERVER_ERROR },
       { status: 500 }
     );
   }
