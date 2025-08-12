@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTranslations } from 'next-intl/server';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const t = await getTranslations();
@@ -12,19 +13,16 @@ export async function POST(request: NextRequest) {
     if (!email || !password) {
       return NextResponse.json(
         { error: t('form.allFieldsRequired') },
-        { status: 400 }
+        { status: StatusCodes.BAD_REQUEST }
       );
     }
 
-    return NextResponse.json(
-      { error: t('errors.authenticationNotImplemented') },
-      { status: 501 }
-    );
+    // write login logic here
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
       { error: t('errors.serverError') },
-      { status: 500 }
+      { status: StatusCodes.INTERNAL_SERVER_ERROR }
     );
   }
 }

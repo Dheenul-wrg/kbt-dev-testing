@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTranslations } from 'next-intl/server';
+import { StatusCodes } from 'http-status-codes';
 
 export async function POST(request: NextRequest) {
   const t = await getTranslations();
@@ -12,7 +13,7 @@ export async function POST(request: NextRequest) {
     if (!firstName || !lastName || !email || !password) {
       return NextResponse.json(
         { error: t('form.allFieldsRequired') },
-        { status: 400 }
+        { status: StatusCodes.BAD_REQUEST }
       );
     }
 
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: t('form.invalidEmail') },
-        { status: 400 }
+        { status: StatusCodes.BAD_REQUEST }
       );
     }
 
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
     if (password.length < 6) {
       return NextResponse.json(
         { error: t('form.minPasswordLength', { min: 6 }) },
-        { status: 400 }
+        { status: StatusCodes.BAD_REQUEST }
       );
     }
 
@@ -42,13 +43,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { error: t('errors.registrationNotImplemented') },
-      { status: 501 }
+      { status: StatusCodes.NOT_IMPLEMENTED }
     );
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
       { error: t('errors.serverError') },
-      { status: 500 }
+      { status: StatusCodes.INTERNAL_SERVER_ERROR }
     );
   }
 }
