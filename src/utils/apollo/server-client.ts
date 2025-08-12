@@ -1,11 +1,17 @@
-import { getClient } from './apollo-client';
+import { getClient } from './apollo-server'; // Use server version
 import type { DocumentNode } from 'graphql';
+import { getTranslations } from 'next-intl/server';
 
+/**
+ * Utility function for server-side GraphQL queries
+ * Use this in Server Components or API routes
+ */
 export async function executeQuery<T = unknown>(
   query: DocumentNode,
   variables?: Record<string, unknown>
 ): Promise<T> {
-  const client = getClient();
+  const client = getClient(); // This uses registerApolloClient
+  const t = await getTranslations();
 
   try {
     const result = await client.query({
@@ -16,7 +22,7 @@ export async function executeQuery<T = unknown>(
 
     return result.data as T;
   } catch (error) {
-    console.error('GraphQL query error:', error);
-    throw error;
+    console.error(t('apollo.queryError'), error);
+    throw new Error(t('apollo.queryError'));
   }
 }

@@ -19,6 +19,3 @@ export const COMMON_STRINGS = {
   ERROR: 'An error occurred',
   SUCCESS: 'Success!',
 } as const;
-
-// Import all message constants
-export * from '@/locales/en/messages';

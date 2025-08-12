@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FORM_MESSAGES, ERROR_MESSAGES } from '@/constants';
+import { getTranslations } from 'next-intl/server';
 
 export async function POST(request: NextRequest) {
+  const t = await getTranslations();
+
   try {
     const body = await request.json();
     const { firstName, lastName, email, password } = body;
@@ -9,7 +11,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     if (!firstName || !lastName || !email || !password) {
       return NextResponse.json(
-        { error: FORM_MESSAGES.ALL_FIELDS_REQUIRED },
+        { error: t('form.allFieldsRequired') },
         { status: 400 }
       );
     }
@@ -18,7 +20,7 @@ export async function POST(request: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: FORM_MESSAGES.INVALID_EMAIL },
+        { error: t('form.invalidEmail') },
         { status: 400 }
       );
     }
@@ -26,7 +28,7 @@ export async function POST(request: NextRequest) {
     // Validate password strength
     if (password.length < 6) {
       return NextResponse.json(
-        { error: FORM_MESSAGES.MIN_PASSWORD_LENGTH },
+        { error: t('form.minPasswordLength', { min: 6 }) },
         { status: 400 }
       );
     }
@@ -39,13 +41,13 @@ export async function POST(request: NextRequest) {
     // - Return user data and token
 
     return NextResponse.json(
-      { error: ERROR_MESSAGES.REGISTRATION_NOT_IMPLEMENTED },
+      { error: t('errors.registrationNotImplemented') },
       { status: 501 }
     );
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
-      { error: ERROR_MESSAGES.SERVER_ERROR },
+      { error: t('errors.serverError') },
       { status: 500 }
     );
   }
