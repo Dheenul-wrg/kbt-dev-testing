@@ -73,5 +73,19 @@
     "maxLength": "Must be no more than {max} characters",
     "passwordMatch": "Passwords must match",
     "strongPassword": "Password must contain at least 8 characters, including uppercase, lowercase, number and special character"
+  },
+  "slack": {
+    "username": "KBT Trip Builder",
+    "iconEmoji": ":rocket:",
+    "unknownError": "Unknown error",
+    "titles": {
+      "error": "Error Alert"
+    },
+    "fields": {
+      "error": "Error",
+      "user": "User",
+      "action": "Action",
+      "url": "URL"
+    }
   }
 }

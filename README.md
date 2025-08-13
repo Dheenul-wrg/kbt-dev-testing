@@ -79,8 +79,70 @@ src/
 Create a `.env` file with the following variables:
 
 ```env
-DATABASE_URL="your-database-url"
-# Add other environment variables as needed
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/kbt_trip_builder"
+
+# GraphQL
+NEXT_PUBLIC_GRAPHQL_URL="http://localhost:4000/graphql"
+
+# Slack Configuration (Optional)
+SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+```
+
+### Slack Error Alerting Setup
+
+1. Create a Slack app in your workspace
+2. Add the "Incoming Webhooks" feature
+3. Create a webhook URL for your desired channel
+4. Add the webhook URL to your `.env` file
+
+The Slack integration provides:
+
+- **Simple Error Alerting**: Easy-to-use error reporting with context
+- **Localized Messages**: All Slack messages are localized using `next-intl`
+- **Automatic Error Handling**: Send errors to Slack with minimal code
+
+#### Usage in API Routes
+
+```typescript
+import { sendErrorAlert } from '@/services';
+
+export async function POST(request: NextRequest) {
+  try {
+    // Your API logic here
+  } catch (error) {
+    // Send error to Slack
+    await sendErrorAlert(error as Error, {
+      user: 'user-email',
+      action: 'API Action',
+      url: request.url,
+    });
+
+    // Return error response
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+#### Simple Usage Examples
+
+```typescript
+import { sendErrorAlert } from '@/services';
+
+// Basic error alert
+await sendErrorAlert(new Error('Database connection failed'), {
+  action: 'Database Query',
+});
+
+// Error with user context
+await sendErrorAlert(error, {
+  user: 'john@example.com',
+  action: 'User Login',
+  url: '/api/auth/login',
+});
 ```
 
 ## 📝 Development Workflow

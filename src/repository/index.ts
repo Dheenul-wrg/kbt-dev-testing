@@ -5,5 +5,8 @@
 // Database
 export { prisma } from './prisma';
 
-// API clients and utilities
-export * from './api';
+// GraphQL API
+export { executeQuery } from './graphql';
+
+// Slack API
+export { sendErrorAlert, isSlackEnabled } from './slack';
