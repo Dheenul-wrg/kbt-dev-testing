@@ -1,0 +1,17 @@
+---
+description: Next.js App Router and API conventions
+globs: "src/app/**/*"
+alwaysApply: false
+---
+
+- Routes live under `src/app`. Use segment folders and `page.tsx`.
+- API handlers at `src/app/api/**/route.ts` exporting HTTP verbs (e.g., `POST`, `GET`).
+- Use `NextResponse.json({ ... }, { status })` and return proper status codes.
+- Prefer server-side data fetching in Server Components; avoid `useEffect` in servers.
+- Mark Client Components with 'use client' and keep them minimal.
+- Use `generateMetadata` for dynamic SEO when appropriate.
+- Configure revalidation/tags per route intentionally; avoid global defaults.
+- Do not access `process.env` in Client Components except `NEXT_PUBLIC_*`.
+- Use `server-only` to guard server utilities and modules from being bundled on the client.
+- Be explicit about caching: set `revalidate` or `dynamic` per route; prefer static + revalidate where possible.
+- Select runtime per route; use `nodejs` when using Prisma or Node-only APIs.

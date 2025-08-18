@@ -1,0 +1,11 @@
+---
+description: Linting, formatting, and TypeScript constraints
+globs: "eslint.config.mjs,**/*.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+- ESLint extends `next/core-web-vitals` and `next/typescript`; Prettier violations are errors.
+- Run `npm run lint` and `npm run format` locally; fix before committing.
+- TypeScript is strict; avoid `any` and unsafe casts. Use explicit return types on exports.
+- Use the `@/*` alias for imports from `src`.
+- Keep functions small; prefer early returns and clear guard clauses.

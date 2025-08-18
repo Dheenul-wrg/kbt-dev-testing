@@ -1,0 +1,91 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success!",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back"
+  },
+  "form": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "minPasswordLength": "Password must be at least {min} characters long",
+    "allFieldsRequired": "All fields are required",
+    "email": "Email",
+    "password": "Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "errors": {
+    "serverError": "Internal server error",
+    "notImplemented": "Not implemented yet",
+    "authenticationNotImplemented": "Authentication not implemented yet",
+    "registrationNotImplemented": "Registration not implemented yet",
+    "emailPasswordRequired": "Email and password are required",
+    "invalidEmailFormat": "Invalid email format",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Access forbidden",
+    "notFound": "Resource not found"
+  },
+  "success": {
+    "created": "Successfully created",
+    "updated": "Successfully updated",
+    "deleted": "Successfully deleted",
+    "saved": "Successfully saved",
+    "loggedIn": "Successfully logged in",
+    "loggedOut": "Successfully logged out"
+  },
+  "apollo": {
+    "queryError": "GraphQL query error",
+    "mutationError": "GraphQL mutation error",
+    "networkError": "Network error occurred",
+    "timeoutError": "Request timed out"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "signUp": "Sign Up",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "welcome": "Welcome, {name}!",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithApple": "Continue with Apple",
+    "continueWithFacebook": "Continue with Facebook"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "profile": "Profile",
+    "settings": "Settings",
+    "dashboard": "Dashboard"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "minLength": "Must be at least {min} characters",
+    "maxLength": "Must be no more than {max} characters",
+    "passwordMatch": "Passwords must match",
+    "strongPassword": "Password must contain at least 8 characters, including uppercase, lowercase, number and special character"
+  },
+  "slack": {
+    "username": "KBT Trip Builder",
+    "iconEmoji": ":rocket:",
+    "unknownError": "Unknown error",
+    "titles": {
+      "error": "Error Alert"
+    },
+    "fields": {
+      "error": "Error",
+      "user": "User",
+      "action": "Action",
+      "url": "URL"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+---
+description: Security and logging hygiene
+globs: "**/*"
+alwaysApply: false
+---
+
+- Do not include PII or secrets in logs. Redact identifiers when necessary.
+- Gate verbose logs to development only (e.g., Prisma `query` logs, Apollo error link details).
+- In production, prefer structured, minimal logs and generic error messages for 500s.
+- Avoid logging full request/response bodies; log correlation IDs and high-level context instead.

@@ -1,0 +1,17 @@
+---
+description: Workspace overview, stack, paths, and core constraints for KBT Trip Builder
+globs: "**/*"
+alwaysApply: true
+---
+
+- Stack: Next.js 15 (App Router), React 19, TypeScript (strict), Tailwind 4, Prisma (PostgreSQL), Apollo Client 3.
+- Path alias: `@/*` → `src/*`. Prefer alias imports over long relatives.
+- Default to Server Components; add 'use client' only for interactivity.
+- No new dependencies without a clear reason and approval.
+- Do not instantiate `PrismaClient` directly; import `prisma` from `@/repository/prisma`.
+- Env: `DATABASE_URL` (server), `NEXT_PUBLIC_GRAPHQL_URL` (client-safe). Only expose `NEXT_PUBLIC_*` to the client.
+- Lint/format required before commit (ESLint + Prettier). Keep code small and readable.
+- Exported APIs should have explicit return types. Avoid `any`.
+- Prefer SSR/streaming and route-level caching over client fetching where possible.
+- Use dynamic imports for large client components to reduce bundle size.
+- Releases via semantic-release; never bump versions manually.
