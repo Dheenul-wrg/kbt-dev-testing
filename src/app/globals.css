@@ -1,26 +1,116 @@
 @import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-kbt-deep-green: #193e44;
+  --color-kbt-button-border: #82a7ae;
+  --color-kbt-hint-text: #b4b7b7;
+  --color-kbt-textfield-border: #415e63;
+  --color-kbt-register-button: #64723f;
+  --color-kbt-normal-text: #f1eddd;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* KBT Brand Colors */
+  --color-kbt-deep-green: #193e44;
+  --color-kbt-brand: #0c3e42;
+  --color-kbt-dark-green: #64723f;
+
+  /* KBT Font Sizes */
+  --font-size-xs: 9px;
+  --font-size-sm: 10.5px;
+  --font-size-base: 16px;
+  --font-size-lg: 19px;
+  --font-size-xl: 28px;
+  --font-size-2xl: 33px;
+  --font-size-3xl: 49px;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom font classes for KBT design system */
+.font-signifier {
+  font-family: 'Signifier', 'Georgia', 'Times New Roman', serif;
+}
+
+.font-gt-america {
+  font-family: 'GT America', 'Arial', 'Helvetica', sans-serif;
+}
+
+/* Font face declarations for local fonts */
+@font-face {
+  font-family: 'GT America';
+  src:
+    url('/fonts/GTAmerica-Light.woff2') format('woff2'),
+    url('/fonts/GTAmerica-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GT America';
+  src:
+    url('/fonts/GTAmerica-Regular.woff2') format('woff2'),
+    url('/fonts/GTAmerica-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GT America';
+  src:
+    url('/fonts/GTAmerica-Medium.woff2') format('woff2'),
+    url('/fonts/GTAmerica-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GT America';
+  src:
+    url('/fonts/GTAmerica-Bold.woff2') format('woff2'),
+    url('/fonts/GTAmerica-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Signifier';
+  src:
+    url('/fonts/Signifier-Extralight.woff2') format('woff2'),
+    url('/fonts/Signifier-Extralight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Signifier';
+  src:
+    url('/fonts/Signifier-Light.woff2') format('woff2'),
+    url('/fonts/Signifier-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Signifier';
+  src:
+    url('/fonts/Signifier-Thin.woff2') format('woff2'),
+    url('/fonts/Signifier-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
 }

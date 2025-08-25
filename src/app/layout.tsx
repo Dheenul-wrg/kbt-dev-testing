@@ -1,9 +1,9 @@
+import { ApolloWrapper, AuthSessionProvider } from '@/components/providers';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-import { ApolloWrapper } from '@/components/providers/apollo-provider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,11 +30,11 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={'font-gt-america'}>
         <NextIntlClientProvider>
-          <ApolloWrapper>{children}</ApolloWrapper>
+          <ApolloWrapper>
+            <AuthSessionProvider>{children}</AuthSessionProvider>
+          </ApolloWrapper>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { LoginForm } from '@/components/auth/login-form';
+import LoginModal from '@/components/auth/login-modal';
 
 export const metadata: Metadata = {
   title: 'Login - KBT Trip Builder',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function LoginPage() {
-  return <LoginForm />;
+  return <LoginModal isOpen={true} />;
 }

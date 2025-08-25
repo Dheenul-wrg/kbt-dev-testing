@@ -1,3 +1,2 @@
-// Export all custom hooks from this directory
-// Example: export { useLocalStorage } from './useLocalStorage';
-// Example: export { useApi } from './useApi';
+// Export all hooks from this directory
+export { useAuth } from './use-auth';
