@@ -1,6 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,12 +8,433 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Add your database models here
-// Example:
-// model User {
-//   id        String   @id @default(cuid())
-//   email     String   @unique
-//   name      String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
+//
+// Enums
+//
+enum GenericStatus {
+  active
+  inactive
+}
+
+enum Visibility {
+  private
+  visible
+  shared
+}
+
+enum TravelMode {
+  driving
+  walking
+  cycling
+  driving_traffic
+}
+
+enum TwoFactorMethod {
+  email
+  totp
+}
+
+enum TwoFactorPurpose {
+  login
+  verify_email
+  reset_password
+  mfa_challenge
+}
+
+enum TwoFactorStatus {
+  expired
+  success
+}
+
+//
+// Lookup tables
+//
+model Role {
+  role_id    Int           @id @default(autoincrement())
+  role_name  String        @unique @db.VarChar(100)
+  status     GenericStatus
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+
+  users     User[]
+  rolePerms RolePermission[]
+
+  @@index([status])
+  @@map("roles")
+}
+
+model RegionFilter {
+  region_id    Int           @id @default(autoincrement())
+  wp_region_id Int?
+  region_name  String        @unique @db.VarChar(255)
+  status       GenericStatus
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+
+  @@index([status])
+  @@index([wp_region_id])
+  @@map("region_filters")
+}
+
+model CategoryFilter {
+  category_id    Int           @id @default(autoincrement())
+  wp_category_id Int?
+  category_name  String        @unique @db.VarChar(255)
+  status         GenericStatus
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+
+  @@index([status])
+  @@index([wp_category_id])
+  @@map("category_filters")
+}
+
+model TripResourceType {
+  trip_resource_type_id Int           @id @default(autoincrement())
+  type_name             String        @unique @db.VarChar(100) // e.g., Destination, Stay, Experience, POI
+  status                GenericStatus
+  created_at            DateTime      @default(now())
+  updated_at            DateTime      @updatedAt
+
+  resources TripResource[]
+
+  @@index([status])
+  @@map("trip_resource_types")
+}
+
+//
+// Auth / Users
+//
+model User {
+  user_id        Int           @id @default(autoincrement())
+  email          String        @unique @db.VarChar(255)
+  password_hash  String        @db.VarChar(255)
+  role_id        Int
+  email_verified Boolean       @default(false)
+  status         GenericStatus
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+
+  role           Role               @relation(fields: [role_id], references: [role_id], onDelete: Restrict)
+  accounts       Account[]
+  trips          Trip[]             @relation("UserTrips")
+  favorites      UserFavorite[]
+  shareEvents    TripShareHistory[] @relation("ShareActor")
+  twoFactorCodes TwoFactorCode[]
+
+  @@index([role_id])
+  @@index([status])
+  @@index([email_verified])
+  @@index([created_at])
+  // Composite indexes for common query patterns
+  @@index([status, email_verified])
+  @@index([role_id, status])
+  @@map("user")
+}
+
+model Account {
+  id                String        @id @default(cuid())
+  userId            Int
+  type              String        @db.VarChar(50)
+  provider          String        @db.VarChar(50)
+  providerAccountId String        @db.VarChar(255)
+  refresh_token     String?       @db.Text
+  access_token      String?       @db.Text
+  expires_at        Int?
+  token_type        String?       @db.VarChar(50)
+  scope             String?       @db.VarChar(500)
+  id_token          String?       @db.Text
+  status            GenericStatus
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [user_id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@index([provider])
+  @@index([status])
+  @@index([expires_at])
+  @@map("accounts")
+}
+
+//
+// Permissions
+//
+model Permission {
+  permission_id Int           @id @default(autoincrement())
+  perm_key      String        @unique @db.VarChar(100) // e.g., trips.read, trips.write
+  description   String?       @db.VarChar(255)
+  status        GenericStatus
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+
+  rolePerms RolePermission[]
+
+  @@index([status])
+  @@map("permissions")
+}
+
+model RolePermission {
+  role_id       Int
+  permission_id Int
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  role       Role       @relation(fields: [role_id], references: [role_id], onDelete: Cascade)
+  permission Permission @relation(fields: [permission_id], references: [permission_id], onDelete: Cascade)
+
+  @@id([role_id, permission_id])
+  @@map("role_permissions")
+}
+
+//
+// Core: Trips, Days, Items, Resources, Experiences
+//
+model Trip {
+  trip_id        Int           @id @default(autoincrement())
+  trip_name      String        @db.VarChar(255)
+  total_days     Int           @db.SmallInt
+  description    String?       @db.Text
+  status         GenericStatus
+  is_recommended Boolean       @default(false)
+  recommended_by String?       @db.VarChar(255)
+  visibility     Visibility
+  default_mode   TravelMode
+  created_by     Int
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+
+  creator      User               @relation("UserTrips", fields: [created_by], references: [user_id], onDelete: Restrict)
+  days         TripDay[]
+  shareHistory TripShareHistory[]
+
+  @@index([created_by])
+  @@index([status])
+  @@index([visibility])
+  @@index([is_recommended])
+  @@index([created_at])
+  // Composite indexes for common query patterns
+  @@index([status, visibility])
+  @@index([created_by, status])
+  @@index([is_recommended, status])
+  @@map("trips")
+}
+
+model TripDay {
+  trip_day_id Int           @id @default(autoincrement())
+  trip_id     Int
+  day_number  Int           @db.SmallInt
+  notes       String?       @db.Text
+  status      GenericStatus
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+
+  trip  Trip       @relation(fields: [trip_id], references: [trip_id], onDelete: Cascade)
+  items TripItem[]
+
+  @@unique([trip_id, day_number])
+  @@index([trip_id])
+  @@index([status])
+  @@index([trip_id, day_number])
+  @@map("trip_days")
+}
+
+model TripResource {
+  trip_resource_id       Int           @id @default(autoincrement())
+  wp_trip_resource_id    Int?
+  trip_resource_type_id  Int
+  is_featured            Boolean       @default(false)
+  trip_resource_title    String        @db.VarChar(500)
+  trip_resource_location Json // {lat, lng, address}
+  image_url              String?       @db.VarChar(1000)
+  status                 GenericStatus
+  created_at             DateTime      @default(now())
+  updated_at             DateTime      @updatedAt
+
+  type          TripResourceType @relation(fields: [trip_resource_type_id], references: [trip_resource_type_id], onDelete: Restrict)
+  tripItems     TripItem[]
+  experiences   TripExperience[] // experiences that reference this resource
+  favorites     UserFavorite[]
+  edgeFromCache EdgeCache[]      @relation("EdgeFrom")
+  edgeToCache   EdgeCache[]      @relation("EdgeTo")
+
+  @@index([trip_resource_type_id])
+  @@index([wp_trip_resource_id])
+  @@index([status])
+  @@index([is_featured])
+  @@index([created_at])
+  // Composite indexes for common query patterns
+  @@index([trip_resource_type_id, status])
+  @@index([is_featured, status])
+  @@index([status, created_at])
+  @@map("trip_resource")
+}
+
+model TripItem {
+  trip_item_id     Int           @id @default(autoincrement())
+  trip_day_id      Int
+  trip_resource_id Int
+  position         Int           @db.SmallInt // drag/drop order
+  // Optional link to a specialized experience row (as per ERD note)
+  experience_id    Int?          @unique // FK to TRIP_EXPERIENCES.experience_id
+  status           GenericStatus
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  // Optional link to edge cache (distance/duration from previous stop)
+  edge_cache_key String?
+
+  day               TripDay         @relation(fields: [trip_day_id], references: [trip_day_id], onDelete: Cascade)
+  resource          TripResource    @relation(fields: [trip_resource_id], references: [trip_resource_id], onDelete: Restrict)
+  experience        TripExperience? @relation("ItemToExperienceById", fields: [experience_id], references: [experience_id])
+  edgeCache         EdgeCache?      @relation(fields: [edge_cache_key], references: [cache_key])
+  experienceDetails TripExperience?
+
+  @@unique([trip_day_id, position]) // stable ordering within a day
+  @@index([trip_day_id])
+  @@index([trip_resource_id])
+  @@index([edge_cache_key])
+  @@index([status])
+  @@index([experience_id])
+  // Composite indexes for common query patterns
+  @@index([trip_day_id, position])
+  @@index([trip_day_id, status])
+  @@index([trip_resource_id, status])
+  @@map("trip_items")
+}
+
+model EdgeCache {
+  cache_key             String        @id
+  from_trip_resource_id Int
+  to_trip_resource_id   Int
+  mode                  String
+  provider_params       Json?
+  distance_m            Int?
+  duration_s            Int?
+  geometry_polyline     String?
+  provider              String?
+  usage_count           Int           @default(0)
+  status                GenericStatus
+  computed_at           DateTime?
+  expires_at            DateTime?
+  created_at            DateTime      @default(now())
+  updated_at            DateTime      @updatedAt
+
+  fromResource TripResource @relation("EdgeFrom", fields: [from_trip_resource_id], references: [trip_resource_id], onDelete: Restrict)
+  toResource   TripResource @relation("EdgeTo", fields: [to_trip_resource_id], references: [trip_resource_id], onDelete: Restrict)
+  items        TripItem[]
+
+  // Unique constraint for logical edge identity
+  @@unique([from_trip_resource_id, to_trip_resource_id, mode, provider])
+  @@index([from_trip_resource_id])
+  @@index([to_trip_resource_id])
+  @@index([mode])
+  @@index([status])
+  @@index([expires_at])
+  @@index([usage_count])
+  // Composite indexes for common query patterns
+  @@index([from_trip_resource_id, to_trip_resource_id, mode])
+  @@index([status, expires_at])
+  @@map("edge_cache")
+}
+
+model TripExperience {
+  experience_id    Int           @id @default(autoincrement())
+  trip_item_id     Int           @unique
+  trip_resource_id Int
+  status           GenericStatus
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  // one-to-one with TripItem (the "experience details" of that item)
+  item     TripItem     @relation(fields: [trip_item_id], references: [trip_item_id], onDelete: Cascade)
+  // also points to the resource that is the experience
+  resource TripResource @relation(fields: [trip_resource_id], references: [trip_resource_id], onDelete: Restrict)
+
+  // backref for TripItem.experience_id (optional)
+  itemById TripItem? @relation("ItemToExperienceById")
+
+  @@index([trip_resource_id])
+  @@index([status])
+  @@index([created_at])
+  // Composite indexes for common query patterns
+  @@index([trip_resource_id, status])
+  @@map("trip_experiences")
+}
+
+model UserFavorite {
+  favorite_id      Int           @id @default(autoincrement())
+  user_id          Int
+  trip_resource_id Int
+  status           GenericStatus
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  user     User         @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  resource TripResource @relation(fields: [trip_resource_id], references: [trip_resource_id], onDelete: Cascade)
+
+  @@unique([user_id, trip_resource_id])
+  @@index([user_id])
+  @@index([trip_resource_id])
+  @@index([status])
+  @@index([created_at])
+  // Composite indexes for common query patterns
+  @@index([user_id, status])
+  @@index([trip_resource_id, status])
+  @@map("user_favorites")
+}
+
+model TripShareHistory {
+  share_event_id Int      @id @default(autoincrement())
+  trip_id        Int
+  actor_user_id  Int?
+  target_type    String   @db.VarChar(50) // user|email|public_link
+  target_email   String?  @db.VarChar(255)
+  url            String?  @db.VarChar(1000)
+  status         String   @db.VarChar(50) // created|revoked|viewed|expired|permissions_changed|resent|link_regenerated
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  trip  Trip  @relation(fields: [trip_id], references: [trip_id], onDelete: Cascade)
+  actor User? @relation("ShareActor", fields: [actor_user_id], references: [user_id], onDelete: SetNull)
+
+  @@index([trip_id])
+  @@index([actor_user_id])
+  @@index([target_type])
+  @@index([status])
+  @@index([created_at])
+  // Composite indexes for common query patterns
+  @@index([trip_id, status])
+  @@index([actor_user_id, created_at])
+  @@map("trip_share_history")
+}
+
+model TwoFactorCode {
+  id          Int              @id @default(autoincrement())
+  user_id     Int
+  method      TwoFactorMethod
+  purpose     TwoFactorPurpose
+  code_hash   String           @db.VarChar(255)
+  issued_at   DateTime         @default(now())
+  expires_at  DateTime
+  consumed_at DateTime?
+  attempts    Int              @default(0) @db.SmallInt
+  sent_to     String           @db.VarChar(255) // email or E.164 phone
+  status      TwoFactorStatus?
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+
+  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([purpose])
+  @@index([expires_at])
+  @@index([method])
+  @@index([status])
+  // Composite indexes for common query patterns
+  @@index([user_id, purpose])
+  @@index([user_id, method])
+  @@index([expires_at, status])
+  @@map("two_factor_codes")
+}
