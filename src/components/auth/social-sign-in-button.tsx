@@ -1,6 +1,4 @@
 import Image from 'next/image';
-import { Button } from '../ui/button';
-
 interface SocialSignButtonProps {
   icon: string;
   label: string;
@@ -15,7 +13,7 @@ export function SocialSignButton({
   className,
 }: SocialSignButtonProps) {
   return (
-    <Button
+    <button
       onClick={onClick}
       className={
         className ||
@@ -24,6 +22,6 @@ export function SocialSignButton({
     >
       <Image src={icon} alt={label} width={13} height={13} />
       {label}
-    </Button>
+    </button>
   );
 }
