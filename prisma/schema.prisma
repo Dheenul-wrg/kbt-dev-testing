@@ -46,6 +46,16 @@ enum TwoFactorStatus {
   success
 }
 
+enum TripShareStatus {
+  created
+  revoked
+  viewed
+  expired
+  permissions_changed
+  resent
+  link_regenerated
+}
+
 //
 // Lookup tables
 //
@@ -268,7 +278,7 @@ model TripResource {
   @@index([trip_resource_type_id, status])
   @@index([is_featured, status])
   @@index([status, created_at])
-  @@map("trip_resource")
+  @@map("trip_resources")
 }
 
 model TripItem {
@@ -285,11 +295,12 @@ model TripItem {
   // Optional link to edge cache (distance/duration from previous stop)
   edge_cache_key String?
 
-  day               TripDay         @relation(fields: [trip_day_id], references: [trip_day_id], onDelete: Cascade)
-  resource          TripResource    @relation(fields: [trip_resource_id], references: [trip_resource_id], onDelete: Restrict)
-  experience        TripExperience? @relation("ItemToExperienceById", fields: [experience_id], references: [experience_id])
-  edgeCache         EdgeCache?      @relation(fields: [edge_cache_key], references: [cache_key])
-  experienceDetails TripExperience?
+  day        TripDay         @relation(fields: [trip_day_id], references: [trip_day_id], onDelete: Cascade)
+  resource   TripResource    @relation(fields: [trip_resource_id], references: [trip_resource_id], onDelete: Restrict)
+  experience TripExperience? @relation("ItemToExperienceById", fields: [experience_id], references: [experience_id])
+  edgeCache  EdgeCache?      @relation(fields: [edge_cache_key], references: [cache_key])
+  // Back-reference for TripExperience.item relation (one-to-one)
+  experienceRecord TripExperience?
 
   @@unique([trip_day_id, position]) // stable ordering within a day
   @@index([trip_day_id])
@@ -298,7 +309,6 @@ model TripItem {
   @@index([status])
   @@index([experience_id])
   // Composite indexes for common query patterns
-  @@index([trip_day_id, position])
   @@index([trip_day_id, status])
   @@index([trip_resource_id, status])
   @@map("trip_items")
@@ -308,7 +318,7 @@ model EdgeCache {
   cache_key             String        @id
   from_trip_resource_id Int
   to_trip_resource_id   Int
-  mode                  String
+  mode                  TravelMode
   provider_params       Json?
   distance_m            Int?
   duration_s            Int?
@@ -336,7 +346,7 @@ model EdgeCache {
   // Composite indexes for common query patterns
   @@index([from_trip_resource_id, to_trip_resource_id, mode])
   @@index([status, expires_at])
-  @@map("edge_cache")
+  @@map("edge_caches")
 }
 
 model TripExperience {
@@ -392,7 +402,7 @@ model TripShareHistory {
   target_type    String   @db.VarChar(50) // user|email|public_link
   target_email   String?  @db.VarChar(255)
   url            String?  @db.VarChar(1000)
-  status         String   @db.VarChar(50) // created|revoked|viewed|expired|permissions_changed|resent|link_regenerated
+  status         TripShareStatus
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
@@ -407,7 +417,7 @@ model TripShareHistory {
   // Composite indexes for common query patterns
   @@index([trip_id, status])
   @@index([actor_user_id, created_at])
-  @@map("trip_share_history")
+  @@map("trip_share_histories")
 }
 
 model TwoFactorCode {
