@@ -44,6 +44,33 @@ export interface User {
 
 export class UserService {
   /**
+   * Get or create default role
+   */
+  private static async getOrCreateDefaultRole() {
+    try {
+      // Try to find existing default role
+      let defaultRole = await prisma.role.findFirst({
+        where: { role_name: 'user' },
+      });
+
+      if (!defaultRole) {
+        // Create default role if it doesn't exist
+        defaultRole = await prisma.role.create({
+          data: {
+            role_name: 'user',
+            status: 'active',
+          },
+        });
+      }
+
+      return defaultRole;
+    } catch (error) {
+      console.error('Error getting or creating default role:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Find user by email
    */
   static async findByEmail(email: string): Promise<User | null> {
@@ -100,12 +127,15 @@ export class UserService {
 
       const hashedPassword = await bcrypt.hash(userData.password, 12);
 
+      // Get or create default role before creating user
+      const defaultRole = await this.getOrCreateDefaultRole();
+
       const user = await prisma.user.create({
         data: {
           email: userData.email,
-          name: userData.name,
-          password: hashedPassword,
-          image: userData.image,
+          password_hash: hashedPassword,
+          role_id: defaultRole.role_id, // Use the actual role ID
+          status: 'active',
         },
       });
 
@@ -136,35 +166,40 @@ export class UserService {
           // Link new OAuth account to existing user
           await prisma.account.create({
             data: {
-              userId: user.id,
+              userId: parseInt(user.id),
               type: 'oauth',
               provider: userData.provider,
               providerAccountId: userData.providerAccountId,
+              status: 'active',
             },
           });
         }
+        // Note: User model doesn't have name/image fields, so we only update the timestamp
         user = await prisma.user.update({
-          where: { id: user.id },
+          where: { user_id: user.id },
           data: {
-            name: userData.name || user.name,
-            image: userData.image || user.image,
-            updatedAt: new Date(),
+            updated_at: new Date(),
           },
         });
 
         return user;
       }
 
+      // Get or create default role before creating user
+      const defaultRole = await this.getOrCreateDefaultRole();
+
       user = await prisma.user.create({
         data: {
           email: userData.email,
-          name: userData.name,
-          image: userData.image,
+          password_hash: '', // OAuth users don't need password
+          role_id: defaultRole.role_id, // Use the actual role ID
+          status: 'active',
           accounts: {
             create: {
               type: 'oauth',
               provider: userData.provider,
               providerAccountId: userData.providerAccountId,
+              status: 'active',
             },
           },
         },
@@ -213,10 +248,10 @@ export class UserService {
   ): Promise<User | null> {
     try {
       const user = await prisma.user.update({
-        where: { id: userId },
+        where: { user_id: parseInt(userId) },
         data: {
           ...updateData,
-          updatedAt: new Date(),
+          updated_at: new Date(),
         },
       });
 
@@ -233,7 +268,7 @@ export class UserService {
   static async deleteUser(userId: string): Promise<boolean> {
     try {
       await prisma.user.delete({
-        where: { id: userId },
+        where: { user_id: parseInt(userId) },
       });
       return true;
     } catch (error) {
@@ -248,7 +283,7 @@ export class UserService {
   static async getUserWithAccounts(userId: string): Promise<User | null> {
     try {
       const user = await prisma.user.findUnique({
-        where: { id: userId },
+        where: { user_id: parseInt(userId) },
         include: {
           accounts: true,
         },
