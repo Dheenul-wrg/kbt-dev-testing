@@ -160,6 +160,7 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
         className="flex flex-col gap-[12px] font-gt-america pl-8 lg:pl-11 pr-8 lg:pr-12"
       >
         <div className="flex flex-col gap-[9px]">
+          <legend>Enter OTP</legend>
           <div className="flex justify-center gap-1.5 lg:gap-2">
             {otp.map((digit, index) => (
               <input
@@ -172,6 +173,8 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
                 value={digit}
                 onChange={e => handleOtpChange(index, e.target.value)}
                 onKeyDown={e => handleKeyDown(index, e)}
+                aria-label={`Digit ${index + 1} of 6-digit OTP`}
+                inputMode="numeric"
                 className="w-10 h-10 lg:w-12 lg:h-12 text-center bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary text-[16px] lg:text-[18px] tracking-[0.06em] rounded-[3px] focus:outline-none focus:border-brand-secondary"
               />
             ))}

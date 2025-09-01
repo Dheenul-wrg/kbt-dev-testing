@@ -227,7 +227,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           {/* Right Section - Full Image */}
           <div className="hidden lg:block flex-1 h-full w-full">
             <Image
-              src="/images/KDA_Image_Rickhouse_2 .jpg"
+              src="/images/KDA_Image_Rickhouse_2.jpg"
               alt="Bourbon barrel warehouse"
               width={450}
               height={780}

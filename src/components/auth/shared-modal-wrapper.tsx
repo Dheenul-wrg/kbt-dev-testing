@@ -31,8 +31,8 @@ const SharedModalWrapper: React.FC<SharedModalWrapperProps> = ({
           <Image
             src="/icons/Navigation.svg"
             alt="close"
-            width={24}
-            height={24}
+            width={49}
+            height={23}
             className="w-[49px] h-[23px]"
           />
         </button>
@@ -46,7 +46,7 @@ const SharedModalWrapper: React.FC<SharedModalWrapperProps> = ({
           {/* Right Section - Full Image */}
           <div className="hidden lg:block flex-1 h-full w-full">
             <Image
-              src="/images/KDA_Image_Rickhouse_2 .jpg"
+              src="/images/KDA_Image_Rickhouse_2.jpg"
               alt="Bourbon barrel warehouse"
               width={450}
               height={780}

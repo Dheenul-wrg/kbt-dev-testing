@@ -16,7 +16,7 @@ interface RegistrationPopupProps {
 }
 
 export function RegistrationPopup({
-  isOpen = true,
+  isOpen = false,
   onClose,
   onSwitchToLogin,
 }: RegistrationPopupProps) {
