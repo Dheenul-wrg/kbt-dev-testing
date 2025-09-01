@@ -1,11 +1,7 @@
 import React from 'react';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  type?: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
+  label?: string;
 }
 
 export function TextField({
@@ -14,17 +10,25 @@ export function TextField({
   value,
   onChange,
   className = '',
+  label,
   ...props
 }: TextFieldProps) {
   return (
-    <input
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className={`w-full h-[40px] rounded-[3px] border border-kbt-textfield-border 
-                  px-3 py-2 text-[10px] text-kbt-hint-text ${className}`}
-      {...props}
-    />
+    <>
+      {label && (
+        <label  className="sr-only">
+          {label}
+        </label>
+      )}
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className={`w-full h-[40px] rounded-[3px] border border-kbt-textfield-border 
+                    px-3 py-2 text-sm text-kbt-hint-text ${className}`}
+        {...props}
+      />
+    </>
   );
 }

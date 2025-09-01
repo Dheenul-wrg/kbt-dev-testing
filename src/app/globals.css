@@ -17,16 +17,16 @@
   --color-kbt-brand: #0c3e42;
   --color-kbt-dark-green: #64723f;
   --color-brand-secondary: #f1eddd;
-  --color-button-green: #82a7ae;
+  --color-button-green: #5a6a38;
 
-  /* KBT Font Sizes */
-  --font-size-xs: 9px;
-  --font-size-sm: 10.5px;
-  --font-size-base: 16px;
-  --font-size-lg: 19px;
-  --font-size-xl: 28px;
-  --font-size-2xl: 33px;
-  --font-size-3xl: 49px;
+  /* KBT Font Sizes - Using rem units for accessibility */
+  --font-size-xs: 0.5625rem;    /* 9px at 16px base */
+  --font-size-sm: 0.65625rem;   /* 10.5px at 16px base */
+  --font-size-base: 1rem;       /* 16px at 16px base */
+  --font-size-lg: 1.1875rem;    /* 19px at 16px base */
+  --font-size-xl: 1.75rem;      /* 28px at 16px base */
+  --font-size-2xl: 2.0625rem;   /* 33px at 16px base */
+  --font-size-3xl: 3.0625rem;   /* 49px at 16px base */
 }
 
 /* Dark Mode Colors */
@@ -47,26 +47,10 @@
   }
 }
 
-/* Class-based Dark Mode (for manual toggle) */
-.dark {
-  --color-background: #0a0a0a;
-  --color-foreground: #ededed;
-  --color-kbt-deep-green: #2a5a5f;
-  --color-kbt-button-border: #a2c7ce;
-  --color-kbt-hint-text: #d4d7d7;
-  --color-kbt-textfield-border: #617e83;
-  --color-kbt-register-button: #84933f;
-  --color-kbt-normal-text: #f9f5e5;
-  --color-kbt-brand: #1c5e62;
-  --color-kbt-dark-green: #84933f;
-  --color-brand-secondary: #f9f5e5;
-  --color-button-green: #a2c7ce;
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: GT America,Arial, Helvetica, sans-serif;
 }
 
 /* Custom font classes for KBT design system */

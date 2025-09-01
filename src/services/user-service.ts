@@ -18,7 +18,7 @@ export interface OAuthUserData {
 
 export interface Account {
   id: string;
-  userId: string;
+  userId: number;
   type: string;
   provider: string;
   providerAccountId: string;
@@ -29,16 +29,20 @@ export interface Account {
   scope?: string | null;
   id_token?: string | null;
   session_state?: string | null;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface User {
-  id: string;
+  user_id: number;
   email: string;
-  name: string;
-  password?: string;
-  image?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  password_hash?: string;
+  email_verified?: boolean;
+  role_id: number;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
   accounts?: Account[];
 }
 
@@ -166,7 +170,7 @@ export class UserService {
           // Link new OAuth account to existing user
           await prisma.account.create({
             data: {
-              userId: parseInt(user.id),
+              userId: user.user_id,
               type: 'oauth',
               provider: userData.provider,
               providerAccountId: userData.providerAccountId,
@@ -176,7 +180,7 @@ export class UserService {
         }
         // Note: User model doesn't have name/image fields, so we only update the timestamp
         user = await prisma.user.update({
-          where: { user_id: user.id },
+          where: { user_id: user.user_id },
           data: {
             updated_at: new Date(),
           },
@@ -222,11 +226,11 @@ export class UserService {
     try {
       const user = await this.findByEmail(email);
 
-      if (!user || !user.password) {
+      if (!user || !user.password_hash) {
         return null;
       }
 
-      const isValidPassword = await bcrypt.compare(password, user.password);
+      const isValidPassword = await bcrypt.compare(password, user.password_hash);
 
       if (!isValidPassword) {
         return null;
@@ -243,12 +247,12 @@ export class UserService {
    * Update user profile
    */
   static async updateUser(
-    userId: string,
+    userId: number,
     updateData: Partial<CreateUserData>
   ): Promise<User | null> {
     try {
       const user = await prisma.user.update({
-        where: { user_id: parseInt(userId) },
+        where: { user_id: userId },
         data: {
           ...updateData,
           updated_at: new Date(),
@@ -265,10 +269,10 @@ export class UserService {
   /**
    * Delete user and all related data
    */
-  static async deleteUser(userId: string): Promise<boolean> {
+  static async deleteUser(userId: number): Promise<boolean> {
     try {
       await prisma.user.delete({
-        where: { user_id: parseInt(userId) },
+        where: { user_id: userId },
       });
       return true;
     } catch (error) {
@@ -280,10 +284,10 @@ export class UserService {
   /**
    * Get user with all accounts
    */
-  static async getUserWithAccounts(userId: string): Promise<User | null> {
+  static async getUserWithAccounts(userId: number): Promise<User | null> {
     try {
       const user = await prisma.user.findUnique({
-        where: { user_id: parseInt(userId) },
+        where: { user_id: userId },
         include: {
           accounts: true,
         },

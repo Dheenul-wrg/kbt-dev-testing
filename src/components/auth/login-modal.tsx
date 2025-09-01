@@ -67,6 +67,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       await signIn(provider, { callbackUrl: '/' });
     } catch (error) {
       setError(`An error occurred during ${provider} sign in`);
+    }
+    finally {
       setIsLoading(false);
     }
   };
@@ -80,7 +82,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 " role="dialog" aria-modal="true">
       <div
         className="rounded-[3px] max-w-[739px] w-full h-auto min-h-[600px] overflow-hidden relative shadow-2xl text-white "
         onClick={e => e.stopPropagation()}
@@ -90,6 +92,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           className="absolute lg:top-4.75 right-5.5 text-white hover:bg-white/20 rounded-full transition-colors z-10"
           aria-label="Close modal"
           onClick={handleClose}
+          role="dialog"
+          aria-modal="true"
         >
           <Image
             src="/icons/Navigation.svg"
@@ -104,10 +108,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           {/* Left Section - Form */}
           <div className="bg-kbt-deep-green flex flex-col justify-center gap-[12px] max-w-[370px] pt-9 pb-5">
             <div className="text-center pl-12.5 pr-12 flex flex-col gap-[9px]">
-              <h1 className="font-signifier text-2xl lg:text-[42px] font-[100] text-brand-secondary leading-[99%] tracking-[-1px] text-center m-0 p-0 h-[88px]">
+              <h1 className="font-signifier text-2xl lg:text-[2.625rem] font-[100] text-brand-secondary leading-[99%] tracking-[-1px] text-center m-0 p-0 h-[88px]">
                 Build your own<br></br> Bourbon Trail<sup>™</sup>
               </h1>
-              <p className="font-gt-america font-[300] text-[14px] text-center tracking-[0px] ml-2 leading-[120%] h-[41px]">
+              <p className="font-gt-america font-[300] text-[0.875rem] text-center tracking-[0px] ml-2 leading-[120%] h-[41px]">
                 Sign in to build, save and share your dream Bourbon Trail™
                 trip.
               </p>
@@ -125,19 +129,19 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 icon="/icons/Facebook.svg"
                 label="SIGN IN WITH FACEBOOK"
                 onClick={() => handleSocialSignIn('facebook')}
-                className="w-full flex items-center justify-center gap-3 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[10.5px]"
+                className="w-full flex items-center justify-center gap-3 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[0.65625rem]"
               />
               <SocialSignButton
                 icon="/icons/Vector.svg"
                 label="SIGN IN WITH APPLE"
                 onClick={() => handleSocialSignIn('apple')}
-                className="w-full h-fit flex items-center justify-center gap-3 px-4 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[10.5px]"
+                className="w-full h-fit flex items-center justify-center gap-3 px-4 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[0.65625rem]"
               />
               <SocialSignButton
                 icon="/icons/google-white-icon 1.svg"
                 label="SIGN IN WITH GOOGLE"
                 onClick={() => handleSocialSignIn('google')}
-                className="w-full flex items-center justify-center gap-3 px-4 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[10.5px]"
+                className="w-full flex items-center justify-center gap-3 px-4 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[0.65625rem]"
               />
             </div>
 
@@ -145,7 +149,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               <div className="absolute inset-0 flex items-center pl-11 pr-12">
                 <div className="w-full border-t border-brand-secondary/30"></div>
               </div>
-              <div className=" font-gt-america relative flex justify-center text-[12px] tracking-[0px] leading-[18px]">
+              <div className=" font-gt-america relative flex justify-center text-[0.75rem] tracking-[0px] leading-[18px]">
                 <span className="px-2.5 bg-kbt-deep-green text-brand-secondary ">
                   or continue with
                 </span>
@@ -157,13 +161,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               className="flex flex-col gap-[12px] font-gt-america pl-11 pr-12"
             >
               <div className="flex flex-col gap-[9px]">
+                <label htmlFor="email" className="">Email</label>
                 <TextField
                   name="email"
                   type="email"
                   placeholder="ENTER USERNAME OR EMAIL"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-3.5 pt-3.25 pb-3 bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary text-[10.5px] tracking-[0.06em] transition-colors leading-none rounded-[3px] h-auto"
+                  className="w-full px-3.5 pt-3.25 pb-3 bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary text-[0.65625rem] tracking-[0.06em] transition-colors leading-none rounded-[3px] h-auto"
                   required
                 />
 
@@ -173,7 +178,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                   placeholder="ENTER PASSWORD"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full px-3.5 pt-3.5 pb-3.25 bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary text-[10.5px] tracking-[0.06em] transition-colors leading-none rounded-[3px] h-auto"
+                  className="w-full px-3.5 pt-3.5 pb-3.25 bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary text-[0.65625rem] tracking-[0.06em] transition-colors leading-none rounded-[3px] h-auto"
                   required
                 />
               </div>
@@ -181,7 +186,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               <div className="flex justify-center">
                 <Link
                   href="/forgot-password"
-                  className="text-[13px] tracking-[0px] leading-[18px] underline font-[400]"
+                  className="text-[0.8125rem] tracking-[0px] leading-[18px] underline font-[400]"
                 >
                   Forgot Password?
                 </Link>
@@ -190,7 +195,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full font-[100] flex items-center justify-center gap-2 py-3.5 bg-kbt-dark-green text-[#F1EDDD] text-[10.5px] uppercase tracking-[0.15em] h-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full font-[100] flex items-center justify-center gap-2 py-3.5 bg-kbt-dark-green text-[#F1EDDD] text-[0.65625rem] uppercase tracking-[0.15em] h-auto disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <span>Signing in...</span>
@@ -213,7 +218,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               <span>Don&apos;t have an account? </span>
               <Link
                 href="/signup"
-                className="text-button-green font-medium hover:text-[#5a6a38] transition-colors"
+                className="text-button-green font-medium hover:text-button-green transition-colors"
               >
                 Sign Up Now
               </Link>

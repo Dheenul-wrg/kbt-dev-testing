@@ -26,11 +26,11 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className="font-gt-america antialiased">
         <NextIntlClientProvider>
-          <ApolloWrapper>
             <AuthSessionProvider session={session}>
+          <ApolloWrapper>
               {children}
-            </AuthSessionProvider>
           </ApolloWrapper>
+            </AuthSessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>
