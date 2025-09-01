@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -9,11 +9,22 @@ import { TextField } from './custom-textfield';
 import { KBTNewsletter } from './kbt-newsletter';
 import { SocialSignButton } from './social-sign-in-button';
 
-export function RegistrationPopup() {
+interface RegistrationPopupProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  onSwitchToLogin?: () => void;
+}
+
+export function RegistrationPopup({
+  isOpen = true,
+  onClose,
+  onSwitchToLogin,
+}: RegistrationPopupProps) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    newsletter: false,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,6 +39,13 @@ export function RegistrationPopup() {
     if (error) setError('');
   };
 
+  const handleNewsletterChange = (checked: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      newsletter: checked,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -40,10 +58,9 @@ export function RegistrationPopup() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firstName: 'User', // Default first name
-          lastName: 'User', // Default last name
           email: formData.email,
           password: formData.password,
+          newsletter: formData.newsletter,
         }),
       });
 
@@ -62,16 +79,7 @@ export function RegistrationPopup() {
         password: formData.password,
         redirect: false,
       });
-
-      if (signInResult?.error) {
-        setError(
-          'Registration successful but login failed. Please try logging in.'
-        );
-      } else {
-        // Redirect to home page
-        router.push('/');
-        router.refresh();
-      }
+      router.push('/');
     } catch (error) {
       setError('An error occurred during registration');
     } finally {
@@ -184,8 +192,21 @@ export function RegistrationPopup() {
                 />
               )}
             </button>
-            <KBTNewsletter />
+            <KBTNewsletter
+              checked={formData.newsletter}
+              onChange={handleNewsletterChange}
+            />
           </form>
+
+          <div className="text-center mt-6 text-sm text-brand-secondary px-11">
+            <span>Already have an account? </span>
+            <button
+              onClick={onSwitchToLogin}
+              className="text-button-green font-medium hover:text-[#5a6a38] transition-colors hover:cursor-pointer"
+            >
+              Sign In
+            </button>
+          </div>
         </div>
       </div>
     </div>

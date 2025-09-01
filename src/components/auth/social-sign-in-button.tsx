@@ -15,6 +15,7 @@ export function SocialSignButton({
   return (
     <button
       onClick={onClick}
+      type="button"
       className={
         className ||
         'w-full h-[35px] mb-[9px] bg-transparent border rounded-[3px] border-kbt-button-border text-white text-[10px] font-gt-america-medium flex items-center tracking-widest'
