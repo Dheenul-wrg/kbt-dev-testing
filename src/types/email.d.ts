@@ -10,5 +10,5 @@ export interface EmailConfig {
 }
 
 export interface EmailProvider {
-  sendEmail(to: string, subject: string, html: string): Promise<boolean>;
+  sendEmail(to: string, subject: string, html: string): Promise<void>;
 }

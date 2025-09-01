@@ -96,8 +96,7 @@
     },
     "token": {
       "invalid": "Invalid reset token",
-      "expired": "Reset token has expired",
-      "otpVerified": "OTP verified successfully"
+      "expired": "Reset token has expired"
     },
     "otp": {
       "sentGeneric": "If an account with that email exists, an OTP has been sent.",

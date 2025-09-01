@@ -15,6 +15,7 @@ export {
   findVerificationToken,
   createVerificationToken,
   deleteVerificationToken,
+  deleteVerificationTokenById,
   verifyOtpAndCreateResetToken,
   isTokenExpired,
   resetPasswordWithToken,

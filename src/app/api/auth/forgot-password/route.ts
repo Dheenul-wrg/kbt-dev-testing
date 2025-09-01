@@ -8,6 +8,7 @@ import {
   createOtpToken,
 } from '@/services/verification-service';
 import { getTranslations } from 'next-intl/server';
+import { OTP_EXPIRATION_MINUTES } from '@/constants/auth';
 
 export async function POST(request: NextRequest) {
   const t = await getTranslations();
@@ -39,14 +40,14 @@ export async function POST(request: NextRequest) {
       });
     }
     const otp = generateOtp();
-    const otpExpiry = calculateOtpExpiry(10);
+    const otpExpiry = calculateOtpExpiry(OTP_EXPIRATION_MINUTES);
 
     await createOtpToken(email, otp, otpExpiry);
 
-    const emailSent = await EmailService.sendOtpEmail(email, otp);
-
-    if (!emailSent) {
-      console.error('Failed to send OTP email to:', email);
+    try {
+      await EmailService.sendOtpEmail(email, otp);
+    } catch (emailError) {
+      console.error('Failed to send OTP email to:', email, emailError);
       return NextResponse.json({
         success: true,
         message: t('verification.otp.sentGeneric'),

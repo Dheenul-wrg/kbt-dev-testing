@@ -3,7 +3,12 @@ import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { UserService } from './user-service';
 
-const RESET_TOKEN_EXPIRY_MINUTES = 15;
+import {
+  OTP_EXPIRATION_MINUTES,
+  RESET_TOKEN_EXPIRY_MINUTES,
+  OTP_MIN_VALUE,
+  OTP_MAX_VALUE,
+} from '@/constants/auth';
 const RESET_TOKEN_BYTES = 32;
 
 export function generateResetToken(): string {
@@ -84,22 +89,32 @@ export async function createVerificationToken(
   });
 }
 
-export async function deleteVerificationToken(token: string) {
-  // Get all tokens and find the one that matches
-  const tokens = await prisma.twoFactorCode.findMany({
-    where: { purpose: 'reset_password' },
+/**
+ * Delete verification token by ID - secure method that requires the token ID
+ * This should be called after verifying the token to get its ID
+ * @param tokenId - The database ID of the token to delete
+ */
+export async function deleteVerificationTokenById(tokenId: number) {
+  return await prisma.twoFactorCode.delete({
+    where: { id: tokenId },
   });
+}
 
-  for (const tokenRecord of tokens) {
-    const isValid = await bcrypt.compare(token, tokenRecord.code_hash);
-    if (isValid) {
-      return await prisma.twoFactorCode.delete({
-        where: { id: tokenRecord.id },
-      });
-    }
+/**
+ * @deprecated Use deleteVerificationTokenById instead for better security
+ * This function performs expensive bcrypt operations and should be avoided
+ */
+export async function deleteVerificationToken(email: string, token: string) {
+  // Find the specific token for this email (much more efficient)
+  const tokenRecord = await findVerificationToken(email, token);
+
+  if (!tokenRecord) {
+    return null;
   }
 
-  return null;
+  return await prisma.twoFactorCode.delete({
+    where: { id: tokenRecord.id },
+  });
 }
 
 export async function verifyOtpAndCreateResetToken(email: string, otp: string) {
@@ -161,10 +176,12 @@ export function validatePassword(password: string): {
 }
 
 export function generateOtp(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  return crypto.randomInt(100000, 1000000).toString();
 }
 
-export function calculateOtpExpiry(minutes: number = 10): Date {
+export function calculateOtpExpiry(
+  minutes: number = OTP_EXPIRATION_MINUTES
+): Date {
   return new Date(Date.now() + minutes * 60 * 1000);
 }
 
@@ -228,8 +245,8 @@ export async function resetPasswordWithToken(
       return { success: false, message: 'verification.password.updateFailed' };
     }
 
-    // Delete the used reset token
-    await deleteVerificationToken(resetToken);
+    // Delete the used reset token by ID (secure method - no additional bcrypt operations)
+    await deleteVerificationTokenById(verificationToken.id);
 
     return { success: true, message: 'verification.password.resetSuccess' };
   } catch (error) {

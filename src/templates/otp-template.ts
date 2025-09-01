@@ -1,3 +1,5 @@
+import { OTP_EXPIRATION_MINUTES } from '@/constants/auth';
+
 export function generateOtpEmailTemplate(otp: string): string {
   return `
     <!DOCTYPE html>
@@ -33,7 +35,7 @@ export function generateOtpEmailTemplate(otp: string): string {
           
           <p><strong>Important:</strong></p>
           <ul>
-            <li>This OTP is valid for 10 minutes only</li>
+            <li>This OTP is valid for ${OTP_EXPIRATION_MINUTES} minutes only</li>
             <li>Do not share this OTP with anyone</li>
             <li>If you didn't request this, please ignore this email</li>
           </ul>

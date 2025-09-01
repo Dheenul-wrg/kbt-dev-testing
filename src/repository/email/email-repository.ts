@@ -4,7 +4,7 @@ export async function sendEmail(
   to: string,
   subject: string,
   html: string
-): Promise<boolean> {
+): Promise<void> {
   try {
     const transporter = createEmailTransporter();
     const fromEmail = getDefaultFromEmail();
@@ -17,10 +17,13 @@ export async function sendEmail(
     };
 
     await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully to:', to);
-    return true;
   } catch (error) {
     console.error('Error sending email:', error);
-    return false;
+
+    if (error instanceof Error) {
+      throw new Error(`Failed to send email to ${to}: ${error.message}`);
+    } else {
+      throw new Error(`Failed to send email to ${to}: Unknown error occurred`);
+    }
   }
 }
