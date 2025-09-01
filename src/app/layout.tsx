@@ -2,18 +2,9 @@ import { ApolloWrapper, AuthSessionProvider } from '@/components/providers';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/auth';
 import './globals.css';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   title: 'KBT Trip Builder',
@@ -28,13 +19,16 @@ export default async function RootLayout({
   // Get messages for default locale (English)
   const locale = await getLocale();
 
+  // Fetch session on server to prevent UI flickering
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang={locale}>
-      <body className={'font-gt-america'}>
+      <body className="font-gt-america antialiased">
         <NextIntlClientProvider>
-          <ApolloWrapper>
-            <AuthSessionProvider>{children}</AuthSessionProvider>
-          </ApolloWrapper>
+          <AuthSessionProvider session={session}>
+            <ApolloWrapper>{children}</ApolloWrapper>
+          </AuthSessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

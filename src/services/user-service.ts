@@ -29,14 +29,17 @@ export interface Account {
   scope?: string | null;
   id_token?: string | null;
   session_state?: string | null;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface User {
   user_id: number;
   email: string;
-  password_hash: string;
+  password_hash?: string;
+  email_verified?: boolean;
   role_id: number;
-  email_verified: boolean;
   status: string;
   created_at: Date;
   updated_at: Date;
@@ -85,7 +88,7 @@ export class UserService {
       return user;
     } catch (error) {
       console.error('Error finding user by email:', error);
-      return null;
+      throw error;
     }
   }
 
@@ -111,7 +114,7 @@ export class UserService {
       return account?.user || null;
     } catch (error) {
       console.error('Error finding user by OAuth account:', error);
-      return null;
+      throw error;
     }
   }
 
@@ -120,7 +123,7 @@ export class UserService {
    */
   static async createUserWithCredentials(
     userData: CreateUserData
-  ): Promise<User | null> {
+  ): Promise<User> {
     try {
       if (!userData.password) {
         throw new Error('Password is required for credentials user');
@@ -135,7 +138,7 @@ export class UserService {
         data: {
           email: userData.email,
           password_hash: hashedPassword,
-          role_id: defaultRole.role_id, // Use the actual role ID
+          role_id: defaultRole.role_id,
           status: 'active',
         },
       });
@@ -143,16 +146,14 @@ export class UserService {
       return user;
     } catch (error) {
       console.error('Error creating user with credentials:', error);
-      return null;
+      throw error;
     }
   }
 
   /**
    * Create or update user for OAuth provider
    */
-  static async createOrUpdateOAuthUser(
-    userData: OAuthUserData
-  ): Promise<User | null> {
+  static async createOrUpdateOAuthUser(userData: OAuthUserData): Promise<User> {
     try {
       let user = await this.findByEmail(userData.email);
 
@@ -175,7 +176,7 @@ export class UserService {
             },
           });
         }
-        // Note: User model doesn't have name/image fields, so we only update the timestamp
+
         user = await prisma.user.update({
           where: { user_id: user.user_id },
           data: {
@@ -192,8 +193,8 @@ export class UserService {
       user = await prisma.user.create({
         data: {
           email: userData.email,
-          password_hash: '', // OAuth users don't need password
-          role_id: defaultRole.role_id, // Use the actual role ID
+          password_hash: '',
+          role_id: defaultRole.role_id,
           status: 'active',
           accounts: {
             create: {
@@ -209,7 +210,7 @@ export class UserService {
       return user;
     } catch (error) {
       console.error('Error creating/updating OAuth user:', error);
-      return null;
+      throw error;
     }
   }
 
@@ -239,7 +240,7 @@ export class UserService {
       return user;
     } catch (error) {
       console.error('Error verifying password:', error);
-      return null;
+      throw error;
     }
   }
 
@@ -247,12 +248,12 @@ export class UserService {
    * Update user profile
    */
   static async updateUser(
-    userId: string,
+    userId: number,
     updateData: Partial<CreateUserData>
-  ): Promise<User | null> {
+  ): Promise<User> {
     try {
       const user = await prisma.user.update({
-        where: { user_id: parseInt(userId) },
+        where: { user_id: userId },
         data: {
           ...updateData,
           updated_at: new Date(),
@@ -262,32 +263,31 @@ export class UserService {
       return user;
     } catch (error) {
       console.error('Error updating user:', error);
-      return null;
+      throw error;
     }
   }
 
   /**
    * Delete user and all related data
    */
-  static async deleteUser(userId: string): Promise<boolean> {
+  static async deleteUser(userId: number): Promise<void> {
     try {
       await prisma.user.delete({
-        where: { user_id: parseInt(userId) },
+        where: { user_id: userId },
       });
-      return true;
     } catch (error) {
       console.error('Error deleting user:', error);
-      return false;
+      throw error;
     }
   }
 
   /**
    * Get user with all accounts
    */
-  static async getUserWithAccounts(userId: string): Promise<User | null> {
+  static async getUserWithAccounts(userId: number): Promise<User | null> {
     try {
       const user = await prisma.user.findUnique({
-        where: { user_id: parseInt(userId) },
+        where: { user_id: userId },
         include: {
           accounts: true,
         },
@@ -295,7 +295,7 @@ export class UserService {
       return user;
     } catch (error) {
       console.error('Error getting user with accounts:', error);
-      return null;
+      throw error;
     }
   }
 
