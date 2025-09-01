@@ -87,5 +87,27 @@
       "action": "Action",
       "url": "URL"
     }
+  },
+  "verification": {
+    "password": {
+      "tooShort": "Password must be at least 6 characters long",
+      "updateFailed": "Failed to update password",
+      "resetSuccess": "Password reset successfully"
+    },
+    "token": {
+      "invalid": "Invalid reset token",
+      "expired": "Reset token has expired",
+      "otpVerified": "OTP verified successfully"
+    },
+    "otp": {
+      "sentGeneric": "If an account with that email exists, an OTP has been sent.",
+      "label": "OTP",
+      "invalid": "Invalid OTP",
+      "expired": "OTP has expired",
+      "verified": "OTP verified successfully"
+    },
+    "error": {
+      "general": "An error occurred. Please try again."
+    }
   }
 }

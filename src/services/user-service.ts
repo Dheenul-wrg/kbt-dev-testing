@@ -18,7 +18,7 @@ export interface OAuthUserData {
 
 export interface Account {
   id: string;
-  userId: string;
+  userId: number;
   type: string;
   provider: string;
   providerAccountId: string;
@@ -32,13 +32,14 @@ export interface Account {
 }
 
 export interface User {
-  id: string;
+  user_id: number;
   email: string;
-  name: string;
-  password?: string;
-  image?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  password_hash: string;
+  role_id: number;
+  email_verified: boolean;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
   accounts?: Account[];
 }
 
@@ -166,7 +167,7 @@ export class UserService {
           // Link new OAuth account to existing user
           await prisma.account.create({
             data: {
-              userId: parseInt(user.id),
+              userId: user.user_id,
               type: 'oauth',
               provider: userData.provider,
               providerAccountId: userData.providerAccountId,
@@ -176,7 +177,7 @@ export class UserService {
         }
         // Note: User model doesn't have name/image fields, so we only update the timestamp
         user = await prisma.user.update({
-          where: { user_id: user.id },
+          where: { user_id: user.user_id },
           data: {
             updated_at: new Date(),
           },
@@ -222,11 +223,14 @@ export class UserService {
     try {
       const user = await this.findByEmail(email);
 
-      if (!user || !user.password) {
+      if (!user || !user.password_hash) {
         return null;
       }
 
-      const isValidPassword = await bcrypt.compare(password, user.password);
+      const isValidPassword = await bcrypt.compare(
+        password,
+        user.password_hash
+      );
 
       if (!isValidPassword) {
         return null;
@@ -292,6 +296,44 @@ export class UserService {
     } catch (error) {
       console.error('Error getting user with accounts:', error);
       return null;
+    }
+  }
+
+  /**
+   * Update user password
+   */
+  static async updatePassword(
+    email: string,
+    newPassword: string
+  ): Promise<boolean> {
+    try {
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+      await prisma.user.update({
+        where: { email },
+        data: {
+          password_hash: hashedPassword,
+          updated_at: new Date(),
+        },
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error updating password:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Check if user can use credentials login
+   */
+  static async canUseCredentials(email: string): Promise<boolean> {
+    try {
+      const user = await this.findByEmail(email);
+      return user ? !!user.password_hash : false;
+    } catch (error) {
+      console.error('Error checking credentials capability:', error);
+      return false;
     }
   }
 }
