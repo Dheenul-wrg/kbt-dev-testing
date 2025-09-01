@@ -7,7 +7,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]/route';
+import { authOptions } from '@/utils/auth';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -30,11 +30,9 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className="font-gt-america antialiased">
         <NextIntlClientProvider>
-          <ApolloWrapper>
-            <AuthSessionProvider session={session}>
-              <AuthModalProvider>{children}</AuthModalProvider>
-            </AuthSessionProvider>
-          </ApolloWrapper>
+          <AuthSessionProvider session={session}>
+            <ApolloWrapper><AuthModalProvider>{children}</AuthModalProvider></ApolloWrapper>
+          </AuthSessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

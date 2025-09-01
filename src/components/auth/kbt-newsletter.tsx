@@ -26,7 +26,7 @@ export function KBTNewsletter({
       />
       <label
         htmlFor={id}
-        className="text-[10.5px] text-kbt-normal-text font-medium cursor-pointer"
+        className="text-[0.65625rem] text-kbt-normal-text font-medium cursor-pointer"
       >
         I WOULD LIKE TO SUBSCRIBE TO THE KENTUCKY BOURBON TRAIL<sup>®</sup>{' '}
         NEWSLETTERS
