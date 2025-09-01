@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
 
           if (user) {
             return {
-              id: user.user_id.toString(),
+              id: user.user_id,
               email: user.email,
               name: user.email, // User model doesn't have name field, using email as fallback
             };
@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           const dbUser = await UserService.createOrUpdateOAuthUser(userData);
 
           if (dbUser) {
-            user.id = dbUser.user_id.toString();
+            user.id = dbUser.user_id;
             return true;
           }
 
@@ -103,7 +103,7 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id.toString();
         token.email = user.email;
         token.name = user.name;
         token.image = user.image;
