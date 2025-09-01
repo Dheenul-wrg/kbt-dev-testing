@@ -31,7 +31,9 @@ export default async function RootLayout({
       <body className="font-gt-america antialiased">
         <NextIntlClientProvider>
           <AuthSessionProvider session={session}>
-            <ApolloWrapper><AuthModalProvider>{children}</AuthModalProvider></ApolloWrapper>
+            <ApolloWrapper>
+              <AuthModalProvider>{children}</AuthModalProvider>
+            </ApolloWrapper>
           </AuthSessionProvider>
         </NextIntlClientProvider>
       </body>
