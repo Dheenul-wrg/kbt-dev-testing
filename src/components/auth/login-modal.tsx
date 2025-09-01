@@ -59,38 +59,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleSocialSignIn = async (provider: string) => {
     setIsLoading(true);
     setError('');
 
     try {
-      await signIn('google', { callbackUrl: '/' });
+      await signIn(provider, { callbackUrl: '/' });
     } catch (error) {
-      setError('An error occurred during Google sign in');
-      setIsLoading(false);
-    }
-  };
-
-  const handleFacebookSignIn = async () => {
-    setIsLoading(true);
-    setError('');
-
-    try {
-      await signIn('facebook', { callbackUrl: '/' });
-    } catch (error) {
-      setError('An error occurred during Facebook sign in');
-      setIsLoading(false);
-    }
-  };
-
-  const handleAppleSignIn = async () => {
-    setIsLoading(true);
-    setError('');
-
-    try {
-      await signIn('apple', { callbackUrl: '/' });
-    } catch (error) {
-      setError('An error occurred during Apple sign in');
+      setError(`An error occurred during ${provider} sign in`);
       setIsLoading(false);
     }
   };
@@ -118,8 +94,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           <Image
             src="/icons/Navigation.svg"
             alt="close"
-            width={24}
-            height={24}
+            width={49}
+            height={23}
             className="w-[49px] h-[23px]"
           />
         </button>
@@ -148,19 +124,19 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               <SocialSignButton
                 icon="/icons/Facebook.svg"
                 label="SIGN IN WITH FACEBOOK"
-                onClick={handleFacebookSignIn}
+                onClick={() => handleSocialSignIn('facebook')}
                 className="w-full flex items-center justify-center gap-3 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[10.5px]"
               />
               <SocialSignButton
                 icon="/icons/Vector.svg"
                 label="SIGN IN WITH APPLE"
-                onClick={handleAppleSignIn}
+                onClick={() => handleSocialSignIn('apple')}
                 className="w-full h-fit flex items-center justify-center gap-3 px-4 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[10.5px]"
               />
               <SocialSignButton
                 icon="/icons/google-white-icon 1.svg"
                 label="SIGN IN WITH GOOGLE"
-                onClick={handleGoogleSignIn}
+                onClick={() => handleSocialSignIn('google')}
                 className="w-full flex items-center justify-center gap-3 px-4 py-[10px] bg-transparent border text-[#F1EDDD] rounded-[3px] uppercase leading-[100%] tracking-[0.15em] max-h-[35px] font-gt-america text-[10.5px]"
               />
             </div>
