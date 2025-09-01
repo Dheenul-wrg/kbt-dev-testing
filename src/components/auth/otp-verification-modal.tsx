@@ -141,7 +141,9 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
     <SharedModalWrapper isOpen={isOpen} onClose={handleClose}>
       <div className="text-center pl-8 lg:pl-12.5 pr-8 lg:pr-12 flex flex-col gap-[9px]">
         <h1 className="font-signifier text-2xl lg:text-[42px] font-[100] text-brand-secondary leading-[99%] tracking-[-1px] text-center m-0 p-0 h-[88px]">
-          Enter<br></br> OTP
+          Enter
+          <br />
+          OTP
         </h1>
         <p className="font-gt-america font-[300] text-[14px] text-center tracking-[0px] ml-2 leading-[120%] h-[41px]">
           We&apos;ve sent a 6-digit code to {email}

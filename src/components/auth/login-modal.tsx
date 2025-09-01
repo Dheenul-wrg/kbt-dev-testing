@@ -105,7 +105,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           <div className="bg-kbt-deep-green flex flex-col justify-center gap-[12px] max-w-[370px] pt-9 pb-5">
             <div className="text-center pl-12.5 pr-12 flex flex-col gap-[9px]">
               <h1 className="font-signifier text-2xl lg:text-[42px] font-[100] text-brand-secondary leading-[99%] tracking-[-1px] text-center m-0 p-0 h-[88px]">
-                Build your own<br></br> Bourbon Trail<sup>™</sup>
+                Build your own Bourbon Trail<sup>™</sup>
               </h1>
               <p className="font-gt-america font-[300] text-[14px] text-center tracking-[0px] ml-2 leading-[120%] h-[41px]">
                 Sign in to build, save and share your dream Bourbon Trail™
