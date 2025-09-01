@@ -4,5 +4,4 @@
 export * from './providers';
 
 // Auth components
-export { LoginForm } from './auth/login-form';
-export { RegisterForm } from './auth/register-form';
+export { default as LoginModal } from './auth/login-modal';
