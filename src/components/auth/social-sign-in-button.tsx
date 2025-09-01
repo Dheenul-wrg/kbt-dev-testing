@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 interface SocialSignButtonProps {
   icon: string;
   label: string;

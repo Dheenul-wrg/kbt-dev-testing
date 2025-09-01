@@ -9,7 +9,15 @@ import { TextField } from './custom-textfield';
 import { KBTNewsletter } from './kbt-newsletter';
 import { SocialSignButton } from './social-sign-in-button';
 
-export function RegistrationPopup() {
+interface RegistrationPopupProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function RegistrationPopup({
+  isOpen = true,
+  onClose,
+}: RegistrationPopupProps) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
@@ -82,6 +90,7 @@ export function RegistrationPopup() {
   const handleSocialSignIn = (provider: string) => {
     signIn(provider, { callbackUrl: '/' });
   };
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">

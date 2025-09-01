@@ -203,12 +203,16 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               </div>
 
               <div className="flex justify-center">
-                <Link
-                  href="/forgot-password"
-                  className="text-[13px] tracking-[0px] leading-[18px] underline font-[400]"
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose?.(); // Close the login modal
+                    router.push('/auth/forgot-password'); // Navigate to forgot password page
+                  }}
+                  className="text-[13px] tracking-[0px] leading-[18px] underline font-[400] text-brand-secondary hover:text-button-green transition-colors"
                 >
                   Forgot Password?
-                </Link>
+                </button>
               </div>
 
               <button

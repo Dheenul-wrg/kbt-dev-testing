@@ -1,7 +1,12 @@
-import { ApolloWrapper, AuthSessionProvider } from '@/components/providers';
+import {
+  ApolloWrapper,
+  AuthSessionProvider,
+  AuthModalProvider,
+} from '@/components/providers';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
+import './globals.css';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
@@ -33,7 +38,9 @@ export default async function RootLayout({
       <body className={'font-gt-america'}>
         <NextIntlClientProvider>
           <ApolloWrapper>
-            <AuthSessionProvider>{children}</AuthSessionProvider>
+            <AuthSessionProvider>
+              <AuthModalProvider>{children}</AuthModalProvider>
+            </AuthSessionProvider>
           </ApolloWrapper>
         </NextIntlClientProvider>
       </body>
