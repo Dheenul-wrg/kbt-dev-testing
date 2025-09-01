@@ -94,8 +94,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           <Image
             src="/icons/Navigation.svg"
             alt="close"
-            width={24}
-            height={24}
+            width={49}
+            height={23}
             className="w-[49px] h-[23px]"
           />
         </button>
