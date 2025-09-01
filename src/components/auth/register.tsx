@@ -82,12 +82,16 @@ export function RegistrationPopup({
 
       if (signInResult?.error) {
         // Sign-in failed after registration - provide helpful error message
-        console.error('Auto sign-in failed after registration:', signInResult.error);
-        
-        const errorMessage = signInResult.error === 'CredentialsSignin' 
-          ? 'Account created successfully, but there was an issue with automatic sign-in. Please try signing in manually with your new credentials.'
-          : `Account created successfully, but automatic sign-in failed: ${signInResult.error}. Please try signing in manually.`;
-        
+        console.error(
+          'Auto sign-in failed after registration:',
+          signInResult.error
+        );
+
+        const errorMessage =
+          signInResult.error === 'CredentialsSignin'
+            ? 'Account created successfully, but there was an issue with automatic sign-in. Please try signing in manually with your new credentials.'
+            : `Account created successfully, but automatic sign-in failed: ${signInResult.error}. Please try signing in manually.`;
+
         setError(errorMessage);
         setSuccess(''); // Clear the success message
         return;
@@ -95,7 +99,7 @@ export function RegistrationPopup({
 
       // Only redirect if sign-in was successful
       setSuccess('Account created and signed in successfully! Redirecting...');
-      
+
       // Small delay to show the success message before redirect
       setTimeout(() => {
         router.push('/');

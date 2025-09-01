@@ -15,11 +15,7 @@ export function TextField({
 }: TextFieldProps) {
   return (
     <>
-      {label && (
-        <label  className="sr-only">
-          {label}
-        </label>
-      )}
+      {label && <label className="sr-only">{label}</label>}
       <input
         type={type}
         value={value}

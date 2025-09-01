@@ -67,8 +67,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       await signIn(provider, { callbackUrl: '/' });
     } catch (error) {
       setError(`An error occurred during ${provider} sign in`);
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -82,7 +81,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 " role="dialog" aria-modal="true">
+    <div
+      className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 "
+      role="dialog"
+      aria-modal="true"
+    >
       <div
         className="rounded-[3px] max-w-[739px] w-full h-auto min-h-[600px] overflow-hidden relative shadow-2xl text-white "
         onClick={e => e.stopPropagation()}
@@ -161,7 +164,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               className="flex flex-col gap-[12px] font-gt-america pl-11 pr-12"
             >
               <div className="flex flex-col gap-[9px]">
-                <label htmlFor="email" className="">Email</label>
+                <label htmlFor="email" className="">
+                  Email
+                </label>
                 <TextField
                   name="email"
                   type="email"

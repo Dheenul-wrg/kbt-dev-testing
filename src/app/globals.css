@@ -20,13 +20,13 @@
   --color-button-green: #5a6a38;
 
   /* KBT Font Sizes - Using rem units for accessibility */
-  --font-size-xs: 0.5625rem;    /* 9px at 16px base */
-  --font-size-sm: 0.65625rem;   /* 10.5px at 16px base */
-  --font-size-base: 1rem;       /* 16px at 16px base */
-  --font-size-lg: 1.1875rem;    /* 19px at 16px base */
-  --font-size-xl: 1.75rem;      /* 28px at 16px base */
-  --font-size-2xl: 2.0625rem;   /* 33px at 16px base */
-  --font-size-3xl: 3.0625rem;   /* 49px at 16px base */
+  --font-size-xs: 0.5625rem; /* 9px at 16px base */
+  --font-size-sm: 0.65625rem; /* 10.5px at 16px base */
+  --font-size-base: 1rem; /* 16px at 16px base */
+  --font-size-lg: 1.1875rem; /* 19px at 16px base */
+  --font-size-xl: 1.75rem; /* 28px at 16px base */
+  --font-size-2xl: 2.0625rem; /* 33px at 16px base */
+  --font-size-3xl: 3.0625rem; /* 49px at 16px base */
 }
 
 /* Dark Mode Colors */
@@ -50,7 +50,11 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: GT America,Arial, Helvetica, sans-serif;
+  font-family:
+    GT America,
+    Arial,
+    Helvetica,
+    sans-serif;
 }
 
 /* Custom font classes for KBT design system */
