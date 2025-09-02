@@ -109,7 +109,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
         <div className="flex flex-col lg:flex-row h-full">
           {/* Left Section - Form */}
-          <div className="bg-kbt-deep-green flex flex-col justify-center gap-[12px] max-w-[370px] pt-9 pb-5">
+          <div className="bg-deep-green flex flex-col justify-center gap-[12px] max-w-[370px] pt-9 pb-5">
             <div className="text-center pl-12.5 pr-12 flex flex-col gap-[9px]">
               <h1 className="font-signifier text-2xl lg:text-[2.625rem] font-[100] text-brand-secondary leading-[99%] tracking-[-1px] text-center m-0 p-0 h-[88px]">
                 Build your own<br></br> Bourbon Trail<sup>™</sup>
@@ -153,7 +153,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 <div className="w-full border-t border-brand-secondary/30"></div>
               </div>
               <div className=" font-gt-america relative flex justify-center text-[0.75rem] tracking-[0px] leading-[18px]">
-                <span className="px-2.5 bg-kbt-deep-green text-brand-secondary ">
+                <span className="px-2.5 bg-deep-green text-brand-secondary ">
                   or continue with
                 </span>
               </div>

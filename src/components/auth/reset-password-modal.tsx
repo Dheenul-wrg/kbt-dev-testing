@@ -85,7 +85,7 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
           Reset
           <br /> Password
         </h1>
-        <p className="font-gt-america font-[300] text-[14px] text-center tracking-[0px] ml-2 leading-[120%] h-[41px]">
+        <p className="font-gt-america font-[300] text-sm text-center tracking-[0px] ml-2 leading-[120%] h-10">
           Enter your new password below.
         </p>
       </div>

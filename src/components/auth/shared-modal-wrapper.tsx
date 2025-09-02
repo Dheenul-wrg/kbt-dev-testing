@@ -39,7 +39,7 @@ const SharedModalWrapper: React.FC<SharedModalWrapperProps> = ({
 
         <div className="flex flex-col lg:flex-row h-full">
           {/* Left Section - Form */}
-          <div className="bg-kbt-deep-green flex flex-col justify-center gap-[12px] w-full lg:max-w-[370px] pt-6 lg:pt-9 pb-4 lg:pb-5">
+          <div className="bg-deep-green flex flex-col justify-center gap-3 w-full lg:max-w-[370px] pt-6 lg:pt-9 pb-4 lg:pb-5">
             {children}
           </div>
 

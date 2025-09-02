@@ -157,7 +157,7 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-[12px] font-gt-america pl-8 lg:pl-11 pr-8 lg:pr-12"
+        className="flex flex-col gap-3 font-gt-america pl-8 lg:pl-11 pr-8 lg:pr-12"
       >
         <div className="flex flex-col gap-[9px]">
           <legend>Enter OTP</legend>
