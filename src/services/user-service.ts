@@ -36,7 +36,7 @@ export interface Account {
 export interface User {
   user_id: number;
   email: string;
-  password_hash?: string;
+  password_hash?: string | null;
   email_verified?: boolean;
   role_id: number;
   status: string;
@@ -183,7 +183,7 @@ export class UserService {
           },
         });
 
-        return user;
+        return user!;
       }
 
       // Get or create default role before creating user
@@ -206,7 +206,7 @@ export class UserService {
         },
       });
 
-      return user;
+      return user!;
     } catch (error) {
       console.error('Error creating/updating OAuth user:', error);
       throw error;
@@ -236,7 +236,7 @@ export class UserService {
         return null;
       }
 
-      return user;
+      return user!;
     } catch (error) {
       console.error('Error verifying password:', error);
       throw error;
