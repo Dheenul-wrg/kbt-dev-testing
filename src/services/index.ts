@@ -4,3 +4,23 @@
 
 // Slack Services
 export { sendErrorAlert } from './slack-services/slack';
+
+// Email Services
+export { EmailService } from './email-service';
+
+// Verification Services
+export {
+  generateResetToken,
+  calculateExpiryTime,
+  findVerificationToken,
+  createVerificationToken,
+  deleteVerificationToken,
+  deleteVerificationTokenById,
+  verifyOtpAndCreateResetToken,
+  isTokenExpired,
+  resetPasswordWithToken,
+  validatePassword,
+  generateOtp,
+  calculateOtpExpiry,
+  createOtpToken,
+} from './verification-service';
