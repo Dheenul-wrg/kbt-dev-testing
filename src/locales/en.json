@@ -108,5 +108,10 @@
     "error": {
       "general": "An error occurred. Please try again."
     }
+  },
+  "rateLimit": {
+    "authExceeded": "Too many authentication attempts, please try again later.",
+    "apiExceeded": "Too many requests, please try again later.",
+    "generalExceeded": "Rate limit exceeded, please try again later."
   }
 }
