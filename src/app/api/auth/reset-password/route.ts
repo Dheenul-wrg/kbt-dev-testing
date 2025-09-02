@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
-import {
-  resetPasswordWithToken,
-  validatePassword,
-} from '@/services/verification-service';
+import { resetPasswordWithToken } from '@/services/verification-service';
 import { getTranslations } from 'next-intl/server';
+import { validateEmail, validatePassword } from '@/utils/validation';
 
 export async function POST(request: NextRequest) {
   const t = await getTranslations();
@@ -22,13 +20,34 @@ export async function POST(request: NextRequest) {
         { status: StatusCodes.BAD_REQUEST }
       );
     }
+    // Validate email format
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: emailValidation.error || 'Invalid email address',
+        },
+        { status: StatusCodes.BAD_REQUEST }
+      );
+    }
+
+    // Validate password strength
     const passwordValidation = validatePassword(newPassword);
     if (!passwordValidation.isValid) {
       return NextResponse.json(
         {
           success: false,
-          message: t(passwordValidation.message!),
+          message: passwordValidation.error || 'Invalid password',
         },
+        { status: StatusCodes.BAD_REQUEST }
+      );
+    }
+
+    // Validate resetToken
+    if (!resetToken || resetToken.trim().length === 0) {
+      return NextResponse.json(
+        { success: false, message: 'Reset token is required' },
         { status: StatusCodes.BAD_REQUEST }
       );
     }

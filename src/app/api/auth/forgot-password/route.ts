@@ -9,6 +9,7 @@ import {
 } from '@/services/verification-service';
 import { getTranslations } from 'next-intl/server';
 import { OTP_EXPIRATION_MINUTES } from '@/constants/auth';
+import { validateEmail } from '@/utils/validation';
 
 export async function POST(request: NextRequest) {
   const t = await getTranslations();
@@ -24,10 +25,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Use centralized email validation
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
       return NextResponse.json(
-        { success: false, message: t('form.invalidEmail') },
+        {
+          success: false,
+          message: emailValidation.error || t('form.invalidEmail'),
+        },
         { status: StatusCodes.BAD_REQUEST }
       );
     }
@@ -35,8 +40,8 @@ export async function POST(request: NextRequest) {
     const user = await UserService.findByEmail(email);
     if (!user) {
       return NextResponse.json({
-        success: true,
-        message: t('verification.otp.sentGeneric'),
+        success: false,
+        message: t('form.invalidEmail'),
       });
     }
     const otp = generateOtp();
@@ -47,9 +52,8 @@ export async function POST(request: NextRequest) {
     try {
       await EmailService.sendOtpEmail(email, otp);
     } catch (emailError) {
-      console.error('Failed to send OTP email to:', email, emailError);
       return NextResponse.json({
-        success: true,
+        success: false,
         message: t('verification.otp.sentGeneric'),
       });
     }

@@ -7,6 +7,7 @@ import {
   isTokenExpired,
 } from '@/services/verification-service';
 import { getTranslations } from 'next-intl/server';
+import { validateEmail } from '@/utils/validation';
 
 export async function POST(request: NextRequest) {
   const t = await getTranslations();
@@ -25,6 +26,26 @@ export async function POST(request: NextRequest) {
             t('verification.otp.label') +
             ' are required',
         },
+        { status: StatusCodes.BAD_REQUEST }
+      );
+    }
+
+    // Validate email format
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: emailValidation.error || t('form.invalidEmail'),
+        },
+        { status: StatusCodes.BAD_REQUEST }
+      );
+    }
+
+    // Validate OTP
+    if (!otp.trim() || otp.trim().length < 4) {
+      return NextResponse.json(
+        { success: false, message: 'OTP must be at least 4 characters long' },
         { status: StatusCodes.BAD_REQUEST }
       );
     }

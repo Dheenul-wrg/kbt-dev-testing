@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
 import { UserService } from '@/services/user-service';
+import {
+  validateEmail,
+  validatePassword,
+  validateName,
+} from '@/utils/validation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,21 +20,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Validate email format using centralized validation
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
       return NextResponse.json(
-        { error: 'Invalid email format' },
+        { error: emailValidation.error || 'Invalid email format' },
         { status: StatusCodes.BAD_REQUEST }
       );
     }
 
-    // Validate password strength
-    if (password.length < 6) {
+    // Validate password strength using centralized validation
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
       return NextResponse.json(
-        { error: 'Password must be at least 6 characters long' },
+        { error: passwordValidation.error || 'Invalid password' },
         { status: StatusCodes.BAD_REQUEST }
       );
+    }
+
+    // Validate names if provided
+    if (firstName) {
+      const firstNameValidation = validateName(firstName);
+      if (!firstNameValidation.isValid) {
+        return NextResponse.json(
+          { error: firstNameValidation.error || 'Invalid first name' },
+          { status: StatusCodes.BAD_REQUEST }
+        );
+      }
+    }
+
+    if (lastName) {
+      const lastNameValidation = validateName(lastName);
+      if (!lastNameValidation.isValid) {
+        return NextResponse.json(
+          { error: lastNameValidation.error || 'Invalid last name' },
+          { status: StatusCodes.BAD_REQUEST }
+        );
+      }
     }
 
     // Check if user already exists using UserService
