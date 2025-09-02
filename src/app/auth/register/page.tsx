@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { RegisterForm } from '@/components/auth/register-form';
+import { RegistrationPopup } from '../../../components/auth/register';
 
 export const metadata: Metadata = {
   title: 'Register - KBT Trip Builder',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
-  return <RegisterForm />;
+  return <RegistrationPopup />;
 }
