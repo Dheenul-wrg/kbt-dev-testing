@@ -1,4 +1,8 @@
-import { ApolloWrapper, AuthSessionProvider } from '@/components/providers';
+import {
+  ApolloWrapper,
+  AuthSessionProvider,
+  AuthModalProvider,
+} from '@/components/providers';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
@@ -27,7 +31,9 @@ export default async function RootLayout({
       <body className="font-gt-america antialiased">
         <NextIntlClientProvider>
           <AuthSessionProvider session={session}>
-            <ApolloWrapper>{children}</ApolloWrapper>
+            <ApolloWrapper>
+              <AuthModalProvider>{children}</AuthModalProvider>
+            </ApolloWrapper>
           </AuthSessionProvider>
         </NextIntlClientProvider>
       </body>

@@ -4,8 +4,8 @@
 
 @theme inline {
   /* Light Mode Colors */
-  --color-kbt-deep-green: #193e44;
-  --color-kbt-button-border: #82a7ae;
+  --color-deep-green: #193e44;
+  --color-button-border: #82a7ae;
   --color-kbt-hint-text: #b4b7b7;
   --color-kbt-textfield-border: #415e63;
   --color-kbt-register-button: #64723f;
@@ -34,8 +34,8 @@
   @theme {
     --color-background: #0a0a0a;
     --color-foreground: #ededed;
-    --color-kbt-deep-green: #2a5a5f;
-    --color-kbt-button-border: #a2c7ce;
+    --color-deep-green: #2a5a5f;
+    --color-button-border: #a2c7ce;
     --color-kbt-hint-text: #d4d7d7;
     --color-kbt-textfield-border: #617e83;
     --color-kbt-register-button: #84933f;
@@ -135,4 +135,8 @@ body {
   font-weight: 100;
   font-style: normal;
   font-display: swap;
+}
+
+@component .typography-h1 {
+  @apply font-signifier text-2xl lg:text-[42px] font-[100] text-brand-secondary leading-[99%] tracking-[-1px] text-center m-0 p-0 h-[88px];
 }
