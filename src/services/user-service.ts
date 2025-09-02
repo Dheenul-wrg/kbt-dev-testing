@@ -297,4 +297,42 @@ export class UserService {
       throw error;
     }
   }
+
+  /**
+   * Update user password
+   */
+  static async updatePassword(
+    email: string,
+    newPassword: string
+  ): Promise<boolean> {
+    try {
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+      await prisma.user.update({
+        where: { email },
+        data: {
+          password_hash: hashedPassword,
+          updated_at: new Date(),
+        },
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error updating password:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Check if user can use credentials login
+   */
+  static async canUseCredentials(email: string): Promise<boolean> {
+    try {
+      const user = await this.findByEmail(email);
+      return user ? !!user.password_hash : false;
+    } catch (error) {
+      console.error('Error checking credentials capability:', error);
+      return false;
+    }
+  }
 }
