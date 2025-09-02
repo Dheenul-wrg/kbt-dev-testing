@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { TextField } from './custom-textfield';
 import SharedModalWrapper from './shared-modal-wrapper';
 import Image from 'next/image';
+import { resetPassword } from '@/services/api/auth-service';
 
 interface ResetPasswordModalProps {
   isOpen: boolean;
@@ -53,24 +54,15 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
     setError('');
 
     try {
-      const response = await fetch('/api/auth/reset-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          resetToken,
-          newPassword: formData.newPassword,
-        }),
+      const result = await resetPassword({
+        token: resetToken,
+        newPassword: formData.newPassword,
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         setSuccess('Password reset successfully!');
       } else {
-        setError(data.message);
+        setError(result.error ?? 'An error occurred');
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
@@ -100,14 +92,20 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
 
       {/* Error Message */}
       {error && (
-        <div className="pl-8 lg:pl-11 pr-8 lg:pr-12 mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-[3px] text-red-300 text-sm">
+        <div
+          role="alert"
+          className="pl-8 lg:pl-11 pr-8 lg:pr-12 mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-[3px] text-red-300 text-sm"
+        >
           {error}
         </div>
       )}
 
       {/* Success Message */}
       {success && (
-        <div className="pl-8 lg:pl-11 pr-8 lg:pr-12 mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-[3px] text-green-300 text-sm">
+        <div
+          role="alert"
+          className="pl-8 lg:pl-11 pr-8 lg:pr-12 mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-[3px] text-green-300 text-sm"
+        >
           {success}
         </div>
       )}

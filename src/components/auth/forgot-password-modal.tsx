@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { TextField } from './custom-textfield';
 import SharedModalWrapper from './shared-modal-wrapper';
+import { forgotPassword } from '@/services/api/auth-service';
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -27,20 +28,12 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
     setSuccess('');
 
     try {
-      const response = await fetch('/api/auth/forgot-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setSuccess(data.message);
+      const result = await forgotPassword({ email });
+      if (result.success) {
+        setSuccess('Password reset email sent successfully!');
+        setEmail('');
       } else {
-        setError(data.message);
+        setError(result.error ?? 'An error occurred');
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
@@ -71,7 +64,11 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
 
       {/* Error Message */}
       {error && (
-        <div className="pl-8 lg:pl-11 pr-8 lg:pr-12 mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-[3px] text-red-300 text-sm">
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="pl-8 lg:pl-11 pr-8 lg:pr-12 mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-[3px] text-red-300 text-sm"
+        >
           {error}
         </div>
       )}

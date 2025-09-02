@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import SharedModalWrapper from './shared-modal-wrapper';
+import { verifyOtp } from '@/services/api/auth-service';
 
 interface OtpVerificationModalProps {
   isOpen: boolean;
@@ -77,20 +78,13 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
     setError('');
 
     try {
-      const response = await fetch('/api/auth/verify-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, otp: otpString }),
-      });
+      const result = await verifyOtp({ email, otp: otpString });
 
-      const data = await response.json();
-
-      if (data.success) {
-        onOtpVerified(data.resetToken);
+      if (result.success) {
+        const resetToken = result.data?.resetToken || result.data?.token;
+        onOtpVerified(resetToken);
       } else {
-        setError(data.message);
+        setError(result.message ?? 'An error occurred');
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
@@ -152,7 +146,11 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
 
       {/* Error Message */}
       {error && (
-        <div className="pl-8 lg:pl-11 pr-8 lg:pr-12 mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-[3px] text-red-300 text-sm">
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="pl-8 lg:pl-11 pr-8 lg:pr-12 mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-[3px] text-red-300 text-sm"
+        >
           {error}
         </div>
       )}
