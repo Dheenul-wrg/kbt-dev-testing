@@ -64,6 +64,28 @@ export const useModal = () => {
     [openModal]
   );
 
+  const goBack = useCallback(() => {
+    try {
+      switch (modal) {
+        case 'otp-verification':
+          // Go back to forgot password
+          openModal('forgot-password', { email: email || '' });
+          break;
+        case 'reset-password':
+          openModal('otp-verification', { email: email || '' });
+          break;
+        case 'forgot-password':
+          openModal('login');
+          break;
+        default:
+          closeModal();
+      }
+    } catch (error) {
+      console.error('[Modal] Error going back:', error);
+      closeModal();
+    }
+  }, [modal, email, openModal, closeModal]);
+
   // Memoize the return object to prevent unnecessary re-renders
   const modalState = useMemo(
     () => ({
@@ -73,6 +95,7 @@ export const useModal = () => {
       resetToken: resetToken ? decodeURIComponent(resetToken) : null,
       openModal,
       closeModal,
+      goBack,
       isModalOpen,
       // Convenience
       openLogin,
@@ -92,6 +115,7 @@ export const useModal = () => {
       resetToken,
       openModal,
       closeModal,
+      goBack,
       isModalOpen,
       openLogin,
       openRegister,

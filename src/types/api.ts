@@ -4,6 +4,7 @@ export interface ApiResponse<T = unknown> {
   data?: T;
   message?: string;
   error?: string;
+  resetToken?: string; // For APIs that return resetToken at root level
 }
 
 // Auth-related request interfaces
@@ -37,11 +38,6 @@ export interface RegisterRequest {
 // Auth-related response data interfaces
 export interface ForgotPasswordResponseData {
   message: string;
-}
-
-export interface VerifyOtpResponseData {
-  resetToken: string;
-  message?: string;
 }
 
 export interface ResetPasswordResponseData {

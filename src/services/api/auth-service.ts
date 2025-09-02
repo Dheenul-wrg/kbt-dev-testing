@@ -1,4 +1,5 @@
 import { post } from '@/utils/axios/client';
+import { AxiosError } from 'axios';
 import {
   ApiResponse,
   ForgotPasswordRequest,
@@ -7,7 +8,6 @@ import {
   LoginRequest,
   RegisterRequest,
   ForgotPasswordResponseData,
-  VerifyOtpResponseData,
   ResetPasswordResponseData,
   LoginResponseData,
   RegisterResponseData,
@@ -22,7 +22,15 @@ export async function forgotPassword(
       '/api/auth/forgot-password',
       data
     );
-  } catch (error) {
+  } catch (error: unknown) {
+    // Check if it's an API error response (like 400 with error message)
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      return {
+        success: false,
+        message: error.response.data.message,
+      };
+    }
+
     const errorMessage =
       error instanceof Error ? error.message : 'Failed to send reset email';
     return {
@@ -33,15 +41,18 @@ export async function forgotPassword(
 }
 
 // Verify OTP
-export async function verifyOtp(
-  data: VerifyOtpRequest
-): Promise<ApiResponse<VerifyOtpResponseData>> {
+export async function verifyOtp(data: VerifyOtpRequest): Promise<ApiResponse> {
   try {
-    return await post<ApiResponse<VerifyOtpResponseData>>(
-      '/api/auth/verify-otp',
-      data
-    );
-  } catch (error) {
+    return await post<ApiResponse>('/api/auth/verify-otp', data);
+  } catch (error: unknown) {
+    // Check if it's an API error response (like 400 with error message)
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      return {
+        success: false,
+        message: error.response.data.message,
+      };
+    }
+
     const errorMessage =
       error instanceof Error ? error.message : 'OTP verification failed';
     return {
@@ -60,7 +71,15 @@ export async function resetPassword(
       '/api/auth/reset-password',
       data
     );
-  } catch (error) {
+  } catch (error: unknown) {
+    // Check if it's an API error response (like 400 with error message)
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      return {
+        success: false,
+        message: error.response.data.message,
+      };
+    }
+
     const errorMessage =
       error instanceof Error ? error.message : 'Password reset failed';
     return {
@@ -76,7 +95,15 @@ export async function login(
 ): Promise<ApiResponse<LoginResponseData>> {
   try {
     return await post<ApiResponse<LoginResponseData>>('/api/auth/login', data);
-  } catch (error) {
+  } catch (error: unknown) {
+    // Check if it's an API error response (like 400 with error message)
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      return {
+        success: false,
+        message: error.response.data.message,
+      };
+    }
+
     const errorMessage =
       error instanceof Error ? error.message : 'Login failed';
     return {
@@ -95,7 +122,15 @@ export async function register(
       '/api/auth/register',
       data
     );
-  } catch (error) {
+  } catch (error: unknown) {
+    // Check if it's an API error response (like 400 with error message)
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      return {
+        success: false,
+        message: error.response.data.message,
+      };
+    }
+
     const errorMessage =
       error instanceof Error ? error.message : 'Registration failed';
     return {

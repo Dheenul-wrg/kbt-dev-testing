@@ -4,12 +4,19 @@ import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useModal } from '@/hooks';
+import { signOut } from 'next-auth/react';
 
 export default function Home() {
   const t = useTranslations();
   const { data: session, status } = useSession();
   const { openLogin, openRegister } = useModal();
-
+  const handleSignOut = async () => {
+    try {
+      await signOut({ callbackUrl: '/' });
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <p>KBT Next app</p>
@@ -42,6 +49,13 @@ export default function Home() {
               >
                 Account Settings
               </Link>
+              <button
+                onClick={handleSignOut}
+                className={`inline-block bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700`}
+              >
+                {' '}
+                logout
+              </button>
             </div>
           </div>
         ) : (
