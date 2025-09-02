@@ -111,8 +111,19 @@ export function RegistrationPopup({
     }
   };
 
-  const handleSocialSignIn = (provider: string) => {
-    signIn(provider, { callbackUrl: '/' });
+  const handleSocialSignIn = async (provider: string) => {
+    setIsLoading(true);
+    setError('');
+    try {
+      await signIn(provider, {
+        callbackUrl: '/',
+        redirect: false, // Prevent automatic redirect to handle result
+      });
+    } catch (error) {
+      setError(`An error occurred during ${provider} sign in`);
+    } finally {
+      setIsLoading(false);
+    }
   };
   if (!isOpen) return null;
 

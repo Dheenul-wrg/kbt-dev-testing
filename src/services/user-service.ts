@@ -5,7 +5,6 @@ export interface CreateUserData {
   email: string;
   name: string;
   password?: string;
-  image?: string | null;
 }
 
 export interface OAuthUserData {
@@ -193,7 +192,7 @@ export class UserService {
       user = await prisma.user.create({
         data: {
           email: userData.email,
-          password_hash: '',
+          password_hash: null,
           role_id: defaultRole.role_id,
           status: 'active',
           accounts: {
