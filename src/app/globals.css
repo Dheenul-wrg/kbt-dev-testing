@@ -136,3 +136,7 @@ body {
   font-style: normal;
   font-display: swap;
 }
+
+@component .typography-h1 {
+  @apply font-signifier text-2xl lg:text-[42px] font-[100] text-brand-secondary leading-[99%] tracking-[-1px] text-center m-0 p-0 h-[88px];
+}

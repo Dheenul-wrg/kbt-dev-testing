@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { TextField } from './custom-textfield';
 import SharedModalWrapper from './shared-modal-wrapper';
 import { forgotPassword } from '@/services/api/auth-service';
-
+import Image from 'next/image';
 interface ForgotPasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -52,7 +52,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   return (
     <SharedModalWrapper isOpen={isOpen} onClose={handleClose}>
       <div className="text-center pl-8 lg:pl-12.5 pr-8 lg:pr-12 flex flex-col gap-[9px]">
-        <h1 className="font-signifier text-2xl lg:text-[42px] font-[100] text-brand-secondary leading-[99%] tracking-[-1px] text-center m-0 p-0 h-[88px]">
+        <h1 className="typography-h1">
           Forgot
           <br /> Password
         </h1>
@@ -109,22 +109,13 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
           ) : (
             <>
               <span>send otp</span>
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 10 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <Image
+                src="/icons/arrow.svg"
+                alt="Arrow"
+                width={10}
+                height={10}
                 className="h-[10px]"
-              >
-                <path
-                  d="M1 5H9M9 5L5 1M9 5L5 9"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              />
             </>
           )}
         </button>
