@@ -40,24 +40,10 @@ export async function POST(request: NextRequest) {
     console.error('OTP verification error:', error);
 
     if (error instanceof Error) {
-      if (
-        error.message === 'OTP has expired' ||
-        error.message === 'Token has expired'
-      ) {
-        return NextResponse.json(
-          { success: false, message: t('verification.otp.expired') },
-          { status: StatusCodes.BAD_REQUEST }
-        );
-      } else if (
-        error.message === 'Invalid OTP' ||
-        error.message === 'Invalid token' ||
-        error.message === 'No OTP found'
-      ) {
-        return NextResponse.json(
-          { success: false, message: t('verification.otp.invalid') },
-          { status: StatusCodes.BAD_REQUEST }
-        );
-      }
+      return NextResponse.json(
+        { success: false, message: error.message },
+        { status: StatusCodes.BAD_REQUEST }
+      );
     }
 
     return NextResponse.json(

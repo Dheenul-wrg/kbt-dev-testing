@@ -113,5 +113,12 @@
     "authExceeded": "Too many authentication attempts, please try again later.",
     "apiExceeded": "Too many requests, please try again later.",
     "generalExceeded": "Rate limit exceeded, please try again later."
+  },
+  "email": {
+    "subjects": {
+      "passwordResetOtp": "Password Reset OTP",
+      "verificationOtp": "Verification OTP",
+      "welcome": "Welcome to KBT Trip Builder"
+    }
   }
 }

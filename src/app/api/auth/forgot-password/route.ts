@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       message: t('verification.otp.sentGeneric'),
     });
   } catch (error) {
-    console.log('Forgot password error:', error);
+    console.error('Forgot password error:', error);
     return NextResponse.json(
       { success: false, message: t('errors.serverError') },
       { status: StatusCodes.INTERNAL_SERVER_ERROR }
