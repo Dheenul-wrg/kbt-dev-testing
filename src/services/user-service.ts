@@ -183,7 +183,7 @@ export class UserService {
           },
         });
 
-        return user;
+        return user!;
       }
 
       // Get or create default role before creating user
@@ -206,7 +206,7 @@ export class UserService {
         },
       });
 
-      return user;
+      return user!;
     } catch (error) {
       console.error('Error creating/updating OAuth user:', error);
       throw error;
@@ -236,7 +236,7 @@ export class UserService {
         return null;
       }
 
-      return user;
+      return user!;
     } catch (error) {
       console.error('Error verifying password:', error);
       throw error;
