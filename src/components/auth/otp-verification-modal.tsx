@@ -81,8 +81,11 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
       const result = await verifyOtp({ email, otp: otpString });
 
       if (result.success) {
-        const resetToken = result.data?.resetToken;
-        onOtpVerified(resetToken ?? '');
+        // The API returns resetToken at the root level
+        const resetToken = result.resetToken as string;
+        console.log('OTP verification result:', result);
+        console.log('Extracted resetToken:', resetToken);
+        onOtpVerified(resetToken);
       } else {
         setError(result.message ?? 'An error occurred');
       }

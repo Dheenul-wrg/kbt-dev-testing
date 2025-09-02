@@ -31,7 +31,9 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
       const result = await forgotPassword({ email });
       if (result.success) {
         setSuccess('Password reset email sent successfully!');
-        setEmail('');
+        // Call the callback to switch to OTP verification modal
+        console.log('Calling onOtpSent with email:', email);
+        onOtpSent(email);
       } else {
         setError(result.error ?? 'An error occurred');
       }

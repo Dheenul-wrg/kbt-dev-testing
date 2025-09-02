@@ -11,6 +11,7 @@ interface ResetPasswordModalProps {
   onClose: () => void;
   email: string;
   resetToken: string;
+  onPasswordReset?: () => void;
 }
 
 const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
@@ -18,6 +19,7 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
   onClose,
   email,
   resetToken,
+  onPasswordReset,
 }) => {
   const [formData, setFormData] = useState({
     newPassword: '',
@@ -55,12 +57,17 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
 
     try {
       const result = await resetPassword({
-        token: resetToken,
+        email: email,
+        resetToken: resetToken,
         newPassword: formData.newPassword,
       });
 
       if (result.success) {
         setSuccess('Password reset successfully!');
+        // Call the callback after a short delay to show success message
+        setTimeout(() => {
+          onPasswordReset?.();
+        }, 2000);
       } else {
         setError(result.error ?? 'An error occurred');
       }

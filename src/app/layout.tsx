@@ -1,14 +1,13 @@
-import {
-  ApolloWrapper,
-  AuthSessionProvider,
-  AuthModalProvider,
-} from '@/components/providers';
+import type React from 'react';
+import { ApolloWrapper, AuthSessionProvider } from '@/components/providers';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/utils/auth';
 import './globals.css';
+import { ModalManager } from '@/components/modal-manager/modal-manager';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 export const metadata: Metadata = {
   title: 'KBT Trip Builder',
@@ -30,11 +29,14 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className="font-gt-america antialiased">
         <NextIntlClientProvider>
-          <AuthSessionProvider session={session}>
-            <ApolloWrapper>
-              <AuthModalProvider>{children}</AuthModalProvider>
-            </ApolloWrapper>
-          </AuthSessionProvider>
+          <NuqsAdapter>
+            <AuthSessionProvider session={session}>
+              <ApolloWrapper>
+                {children}
+                <ModalManager />
+              </ApolloWrapper>
+            </AuthSessionProvider>
+          </NuqsAdapter>
         </NextIntlClientProvider>
       </body>
     </html>

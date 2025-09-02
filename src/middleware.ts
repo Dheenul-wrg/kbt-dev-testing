@@ -17,7 +17,10 @@ export async function middleware(request: NextRequest) {
   const t = await getTranslations({ locale: 'en', namespace: 'rateLimit' });
   try {
     if (request.nextUrl.pathname.startsWith('/api/auth/')) {
-      const headers = authRateLimiter.checkNext(request, 5);
+      const headers = authRateLimiter.checkNext(
+        request,
+        RATE_LIMIT_CONFIG.AUTH_MAX_REQUESTS
+      );
 
       if (headers.get('X-RateLimit-Remaining') === '0') {
         console.log(`[Middleware] Auth rate limit exceeded, returning 429`);

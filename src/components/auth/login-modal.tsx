@@ -7,6 +7,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { TextField } from './custom-textfield';
 import { SocialSignButton } from './social-sign-in-button';
+import { useModal } from '@/hooks';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ interface LoginModalProps {
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
+  const { openModal, openForgotPassword, openRegister } = useModal();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -188,12 +190,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="flex justify-center">
-                  <Link
-                    href="/forgot-password"
-                    className="text-[0.8125rem] tracking-[0px] underline"
+                  <button
+                    type="button"
+                    onClick={openForgotPassword}
+                    className="text-[0.8125rem] tracking-[0px] underline cursor-pointer hover:text-brand-secondary/80 transition-colors"
                   >
                     Forgot Password?
-                  </Link>
+                  </button>
                 </div>
 
                 <div>
@@ -223,12 +226,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
             <div className="text-center mt-2 text-[13px] text-brand-secondary">
               <span>Don’t have an account? </span>
-              <Link
-                href="/auth/register"
-                className="text-button-green  text-[13px] underline font-medium hover:text-button-green transition-colors"
+              <button
+                type="button"
+                onClick={openRegister}
+                className="text-button-green text-[13px] underline font-medium hover:text-button-green/80 transition-colors cursor-pointer"
               >
                 Sign Up Now
-              </Link>
+              </button>
             </div>
           </div>
 
