@@ -23,7 +23,7 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(60); // 10 minutes in seconds
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -231,18 +231,19 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
                         value={digit}
                         onChange={e => handleOtpChange(index, e.target.value)}
                         onKeyDown={e => handleKeyDown(index, e)}
+                        onInput={e => {
+                          // Only allow numbers
+                          const value = e.currentTarget.value;
+                          if (value && !/^\d$/.test(value)) {
+                            e.currentTarget.value = value.replace(/\D/g, '');
+                          }
+                        }}
                         aria-label={`Digit ${index + 1} of 6-digit OTP`}
                         inputMode="numeric"
+                        pattern="[0-9]*"
                         className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-center bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary text-sm sm:text-[16px] lg:text-[18px] tracking-[0.06em] rounded-[3px] focus:outline-none focus:border-brand-secondary"
                       />
                     ))}
-                  </div>
-
-                  <div className="text-center text-sm text-brand-secondary">
-                    <span>Time remaining: </span>
-                    <span className={timeLeft <= 60 ? 'text-red-400' : ''}>
-                      {formatTime(timeLeft)}
-                    </span>
                   </div>
                 </div>
 
@@ -274,9 +275,12 @@ const OtpVerificationModal: React.FC<OtpVerificationModalProps> = ({
             <div className="text-center mt-4">
               <button
                 onClick={handleResendOtp}
+                disabled={timeLeft > 0 || isLoading}
                 className="text-button-green font-medium hover:text-[#5a6a38] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs lg:text-sm"
               >
-                Resend OTP
+                {timeLeft > 0
+                  ? `Resend OTP (${formatTime(timeLeft)})`
+                  : 'Resend OTP'}
               </button>
             </div>
           </div>

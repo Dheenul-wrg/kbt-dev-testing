@@ -136,3 +136,8 @@ body {
   font-style: normal;
   font-display: swap;
 }
+
+/* Global button hover cursor styles */
+button:not(:disabled):hover {
+  cursor: pointer;
+}
