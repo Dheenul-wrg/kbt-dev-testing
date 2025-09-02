@@ -6,14 +6,22 @@ import {
   ResetPasswordRequest,
   LoginRequest,
   RegisterRequest,
+  ForgotPasswordResponseData,
+  VerifyOtpResponseData,
+  ResetPasswordResponseData,
+  LoginResponseData,
+  RegisterResponseData,
 } from '@/types/api';
 
 // Forgot Password
 export async function forgotPassword(
   data: ForgotPasswordRequest
-): Promise<ApiResponse> {
+): Promise<ApiResponse<ForgotPasswordResponseData>> {
   try {
-    return await post<ApiResponse>('/api/auth/forgot-password', data);
+    return await post<ApiResponse<ForgotPasswordResponseData>>(
+      '/api/auth/forgot-password',
+      data
+    );
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Failed to send reset email';
@@ -25,9 +33,14 @@ export async function forgotPassword(
 }
 
 // Verify OTP
-export async function verifyOtp(data: VerifyOtpRequest): Promise<ApiResponse> {
+export async function verifyOtp(
+  data: VerifyOtpRequest
+): Promise<ApiResponse<VerifyOtpResponseData>> {
   try {
-    return await post<ApiResponse>('/api/auth/verify-otp', data);
+    return await post<ApiResponse<VerifyOtpResponseData>>(
+      '/api/auth/verify-otp',
+      data
+    );
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'OTP verification failed';
@@ -41,9 +54,12 @@ export async function verifyOtp(data: VerifyOtpRequest): Promise<ApiResponse> {
 // Reset Password
 export async function resetPassword(
   data: ResetPasswordRequest
-): Promise<ApiResponse> {
+): Promise<ApiResponse<ResetPasswordResponseData>> {
   try {
-    return await post<ApiResponse>('/api/auth/reset-password', data);
+    return await post<ApiResponse<ResetPasswordResponseData>>(
+      '/api/auth/reset-password',
+      data
+    );
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Password reset failed';
@@ -55,9 +71,11 @@ export async function resetPassword(
 }
 
 // Login
-export async function login(data: LoginRequest): Promise<ApiResponse> {
+export async function login(
+  data: LoginRequest
+): Promise<ApiResponse<LoginResponseData>> {
   try {
-    return await post<ApiResponse>('/api/auth/login', data);
+    return await post<ApiResponse<LoginResponseData>>('/api/auth/login', data);
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Login failed';
@@ -69,9 +87,14 @@ export async function login(data: LoginRequest): Promise<ApiResponse> {
 }
 
 // Register
-export async function register(data: RegisterRequest): Promise<ApiResponse> {
+export async function register(
+  data: RegisterRequest
+): Promise<ApiResponse<RegisterResponseData>> {
   try {
-    return await post<ApiResponse>('/api/auth/register', data);
+    return await post<ApiResponse<RegisterResponseData>>(
+      '/api/auth/register',
+      data
+    );
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'Registration failed';

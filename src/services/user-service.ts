@@ -36,7 +36,7 @@ export interface Account {
 export interface User {
   user_id: number;
   email: string;
-  password_hash?: string;
+  password_hash?: string | null;
   email_verified?: boolean;
   role_id: number;
   status: string;

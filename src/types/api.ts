@@ -32,3 +32,30 @@ export interface RegisterRequest {
   firstName: string;
   lastName: string;
 }
+
+// Auth-related response data interfaces
+export interface ForgotPasswordResponseData {
+  message: string;
+}
+
+export interface VerifyOtpResponseData {
+  resetToken: string;
+  message?: string;
+}
+
+export interface ResetPasswordResponseData {
+  message: string;
+}
+
+export interface LoginResponseData {
+  message: string;
+  token?: string;
+}
+
+export interface RegisterResponseData {
+  message: string;
+  user?: {
+    id: number;
+    email: string;
+  };
+}
